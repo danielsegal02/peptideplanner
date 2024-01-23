@@ -83,7 +83,7 @@ Draw.MolToFile(romol, 'capped_peptide.png', size=(1200, 1200))
 
 # Create the peptide conformer with corrected atom names and secondary structure
 # Obtain peptide main chain to predict the secondary structure
-fasta = Conformer.get_peptide(biln)
-secstruct = SecStructPredictor.predict_active_ss(fasta)
+#fasta = Conformer.get_peptide(biln)
+#secstruct = SecStructPredictor.predict_active_ss(fasta)
 # Generate the conformer
-romol = Conformer.generate_conformer(romol, secstruct, generate_pdb=True)
+#romol = Conformer.generate_conformer(romol, secstruct, generate_pdb=True)
