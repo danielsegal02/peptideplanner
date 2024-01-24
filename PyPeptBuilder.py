@@ -14,7 +14,7 @@ def generate_peptide_image(peptide_string):
     mol = Molecule(seq, depiction='rdkit')  # Generate the RDKit object
     romol = mol.get_molecule(fmt='ROMol')   # Uses rdkit to get the molecule and draw it to a pdf
     image_path = 'peptide_image.png'
-    Draw.MolToFile(romol, image_path, size=(400, 400))
+    Draw.MolToFile(romol, image_path, size=(600, 200))
     return image_path
 
 

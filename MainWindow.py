@@ -11,44 +11,49 @@ def on_button_click():
     photo = PhotoImage(file=image_path)
     image_label.config(image=photo)
     image_label.image = photo  # Keep a reference
+    # Here you can also update label1 and label2 with the Mass and Net Charge information
 
 
 # Create the main application window
 app = tk.Tk()
 app.title("Peptide Planner")
-app.minsize(800, 600)
+app.minsize(800, 500)
+app.configure(background="white")
 
 ## Create and pack the initial label, input box, and Button
 # First label on the window
-top_label = tk.Label(app, text="Welcome to the Peptide Planner!")
+top_label = tk.Label(app, background="white", text="Welcome to the Peptide Planner!", font=("Arial", 16))
 top_label.pack(pady=10)
 # Input text box
 entry = tk.Entry(app, width=50, font=('Arial 12'))
-entry.pack(padx=10, pady=10)  # To Do Later: restrict what user's can input
+entry.pack(padx=10, pady=10)  # To Do Later: restrict what user can input (i.e. empty string, format it then pass it in, etc...)
 # Button
 button = tk.Button(app, text="Generate Peptide", command=on_button_click)
 button.pack(pady=10)
 
 
 ## Image generation
-# Load the image (use an appropriate file path)
-image_path = ""  # Replace with your image file path
-photo = PhotoImage(file=image_path)
-# Frame to hold the image and labels
+# Frame to hold the image
 image_frame = tk.Frame(app)
-image_frame.pack(padx=10, pady=10)
-# Create a label to display the image and pack it to the left
-image_label = tk.Label(image_frame, image=photo)
-image_label.pack(side=tk.LEFT, padx=10)
+image_frame.configure(background="white")
+image_frame.pack(fill='both', expand=True, padx=10, pady=10)
+# Initialize the image_label with an empty image or placeholder
+placeholder_image = tk.PhotoImage()  # A blank PhotoImage object
+image_label = tk.Label(image_frame, image=placeholder_image)
+image_label.photo = placeholder_image  # Keep a reference
+image_label.pack(padx=10, pady=10)
 
 
-# Create and pack the Mass and Net Charge Labels in a frame 
-label_frame = tk.Frame(image_frame)
-label_frame.pack(side=tk.LEFT, padx=20)
-label1 = tk.Label(label_frame, text="Mass:   ", font=("Arial", 14), anchor="w")
-label1.pack(pady=5, fill="x")
-label2 = tk.Label(label_frame, text="Net Charge:   ", font=("Arial", 14), anchor="w")
-label2.pack(pady=5, fill="x")
+## Create a dedicated frame for the Mass and Net Charge Labels
+info_frame = tk.Frame(app)
+info_frame.configure(background="white")
+info_frame.pack(fill='x', padx=20, pady=10)  # This will make sure it expands with the window
+# Mass Information
+label1 = tk.Label(info_frame, background="white", text="Mass:   ", font=("Arial", 14), anchor="w")
+label1.pack(side='top', pady=5, fill="x")
+# Net Charge Info
+label2 = tk.Label(info_frame, background="white", text="Net Charge:   ", font=("Arial", 14), anchor="w")
+label2.pack(side='top', pady=5, fill="x")
 
 
 # Start the application
