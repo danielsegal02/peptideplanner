@@ -2,12 +2,19 @@ import tkinter as tk
 from tkinter import ttk
 from tkinter import PhotoImage
 from AminoAcids import amino_acid_dict
+from PyPeptBuilder import generate_peptide_image
 
 # Function to be called when the button is clicked
 def on_button_click():
-    button_label.config(text="Button Clicked!")
+    # button_label.config(text="Button Clicked!")
     # selected_value = combo.get()      # use later to display whole AA sequence
     # label.config(text=f"Selected: {selected_value}")
+    amino_acid_string = entry.get()  # Assuming 'entry' is your input widget
+    image_path = generate_peptide_image(amino_acid_string)
+    photo = PhotoImage(file=image_path)
+    image_label.config(image=photo)
+    image_label.image = photo  # Keep a reference, don't know if this line is necessary
+
 
 # Create the main application window
 app = tk.Tk()
@@ -52,10 +59,6 @@ entry.pack(padx=10, pady=10)  # restrict what user's can input later
 button = tk.Button(app, text="Generate Peptide", command=on_button_click)
 button.pack(pady=10)  # Adding some padding for better spacing
 
-# Create and pack the label
-button_label = tk.Label(app, text="Press the button...")
-button_label.pack(pady=10)  # Adding some padding for better spacing
-
 
 # Image generation
 # Load the image (use an appropriate file path)
@@ -81,8 +84,6 @@ label1.pack(pady=5, fill="x")
 # Create and pack the second text label
 label2 = tk.Label(label_frame, text="Net Charge:   ", font=("Arial", 14), anchor="w")
 label2.pack(pady=5, fill="x")
-
-
 
 
 # Start the application
