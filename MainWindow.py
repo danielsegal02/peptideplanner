@@ -22,13 +22,31 @@ app.configure(background="white")
 
 ## Create and pack the initial label, input box, and Button
 # First label on the window
-top_label = tk.Label(app, background="white", text="Welcome to the Peptide Planner!", font=("Arial", 16))
+top_label = tk.Label(app, background="white", text="Welcome to the Peptide Planner!", font=("Verdana", 16))
 top_label.pack(pady=10)
 # Input text box
-entry = tk.Entry(app, width=50, font=('Arial 12'))
+entry = tk.Entry(app, width=50, background="light gray", font=('Arial 12'))
 entry.pack(padx=10, pady=10)  # To Do Later: restrict what user can input (i.e. empty string, format it then pass it in, etc...)
 # Button
-button = tk.Button(app, text="Generate Peptide", command=on_button_click)
+# Create a style object
+style = ttk.Style()
+# Configure a more modern-looking button style
+style.configure("Modern.TButton",
+                font=('Calibri', 12),
+                background='black',
+                foreground='blue',
+                borderwidth=1,
+                relief="raised",
+                padding=3)
+# Apply a layout to make the button appear with 'rounded corners'
+style.layout("Modern.TButton",
+             [('Button.border', {'sticky': 'nswe', 'children':
+                 [('Button.padding', {'sticky': 'nswe', 'children':
+                     [('Button.label', {'sticky': 'nswe'})],
+                 })],
+             })])
+# Apply the style to the button
+button = ttk.Button(app, text="Generate Peptide", style="Modern.TButton", command=on_button_click)
 button.pack(pady=10)
 
 
