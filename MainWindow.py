@@ -34,20 +34,17 @@ button.pack(pady=10)
 # Load the image (use an appropriate file path)
 image_path = ""  # Replace with your image file path
 photo = PhotoImage(file=image_path)
-
 # Frame to hold the image and labels
 image_frame = tk.Frame(app)
 image_frame.pack(padx=10, pady=10)
-
 # Create a label to display the image and pack it to the left
 image_label = tk.Label(image_frame, image=photo)
 image_label.pack(side=tk.LEFT, padx=10)
 
-# Frame to hold the text labels
+
+# Create and pack the Mass and Net Charge Labels in a frame 
 label_frame = tk.Frame(image_frame)
 label_frame.pack(side=tk.LEFT, padx=20)
-
-# Create and pack the Mass and Net Charge Labels
 label1 = tk.Label(label_frame, text="Mass:   ", font=("Arial", 14), anchor="w")
 label1.pack(pady=5, fill="x")
 label2 = tk.Label(label_frame, text="Net Charge:   ", font=("Arial", 14), anchor="w")
