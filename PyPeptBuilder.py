@@ -10,60 +10,19 @@ from rdkit.Chem import Draw
 
 def generate_peptide_image(peptide_string):
     seq = Sequence(peptide_string)
-    seq = correct_pdb_atoms(seq)
-    mol = Molecule(seq, depiction='rdkit')
-    romol = mol.get_molecule(fmt='ROMol')
+    seq = correct_pdb_atoms(seq)    # Correct atom names in the sequence object
+    mol = Molecule(seq, depiction='rdkit')  # Generate the RDKit object
+    romol = mol.get_molecule(fmt='ROMol')   # Uses rdkit to get the molecule and draw it to a pdf
     image_path = 'peptide_image.png'
     Draw.MolToFile(romol, image_path, size=(400, 400))
     return image_path
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-# # Start the Sequence object
+# Test Amino Acid input
 # biln = "ac-D-T-H-F-E-I-A-am"
 
+# Code to print the SMILES format
+# print("The SMILES of the peptide is: {}".format(Chem.MolToSmiles(romol)))
 
-# # difference between HELM and BILN?????
 
-# ################################################
-# ## With HELM: Call the converter to change from HELM to BILN
-# #helm = "PEPTIDE1{[ac].D.T.H.F.E.I.A.[am]}$$$$V2.0"
-# #b = Converter(helm=helm)
-# #biln = b.get_biln()
-# ################################################
-
-# seq = Sequence(biln)
-# # Correct atom names in the sequence object
-# seq = correct_pdb_atoms(seq)
-
-# # # Loop wit the included monomers
-# # mm_list = seq.s_monomers
-# # for i, monomer in enumerate(mm_list):
-# #     mon = monomer['m_romol']
-
-# # Generate the RDKit object
-# mol = Molecule(seq, depiction='rdkit')
-# romol = mol.get_molecule(fmt='ROMol') #uses rdkit to get the molecule and draw it to a pdf
-# # print("The SMILES of the peptide is: {}".format(Chem.MolToSmiles(romol)))
-# Draw.MolToFile(romol, 'peptide_attempt.png', size=(1200, 1200))
+# Does difference between HELM and BILN matter??
