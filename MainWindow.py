@@ -3,15 +3,22 @@ from tkinter import ttk
 from tkinter import PhotoImage
 from AminoAcids import amino_acid_dict
 from PyPeptBuilder import generate_peptide_image
+from Calculations import format_peptide_sequence, calculate_mass_and_charge
 
 # Function to be called when the button is clicked
 def on_button_click(event=None):
+    # Generates the image
     amino_acid_string = entry.get() 
     image_path = generate_peptide_image(amino_acid_string)
     photo = PhotoImage(file=image_path)
     image_label.config(image=photo)
     image_label.image = photo  # Keep a reference
-    # Here you can also update label1 and label2 with the Mass and Net Charge information
+    
+    # Calculates the mass and net charge
+    formatted_peptide = format_peptide_sequence(amino_acid_string)
+    mass, charge = calculate_mass_and_charge(formatted_peptide)
+    mass_label.config(text=f"Mass: {mass}")  # Update mass label
+    charge_label.config(text=f"Net Charge: {charge}")  # Update charge label
 
 
 # Create the main application window
@@ -69,11 +76,11 @@ info_frame = tk.Frame(app)
 info_frame.configure(background="white")
 info_frame.pack(fill='x', padx=20, pady=10)  # This will make sure it expands with the window
 # Mass Information
-label1 = tk.Label(info_frame, background="white", text="Mass:   ", font=("Arial", 14), anchor="w")
-label1.pack(side='top', pady=5, fill="x")
+mass_label = tk.Label(info_frame, background="white", text="Mass:", font=("Arial", 14), anchor="w")
+mass_label.pack(side='top', pady=5, fill="x")
 # Net Charge Info
-label2 = tk.Label(info_frame, background="white", text="Net Charge:   ", font=("Arial", 14), anchor="w")
-label2.pack(side='top', pady=5, fill="x")
+charge_label = tk.Label(info_frame, background="white", text="Net Charge:", font=("Arial", 14), anchor="w")
+charge_label.pack(side='top', pady=5, fill="x")
 
 
 # Start the application
