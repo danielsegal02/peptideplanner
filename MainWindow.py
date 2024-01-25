@@ -5,7 +5,7 @@ from AminoAcids import amino_acid_dict
 from PyPeptBuilder import generate_peptide_image
 
 # Function to be called when the button is clicked
-def on_button_click():
+def on_button_click(event=None):
     amino_acid_string = entry.get() 
     image_path = generate_peptide_image(amino_acid_string)
     photo = PhotoImage(file=image_path)
@@ -48,6 +48,8 @@ style.layout("Modern.TButton",
 # Apply the style to the button
 button = ttk.Button(app, text="Generate Peptide", style="Modern.TButton", command=on_button_click)
 button.pack(pady=10)
+# enables the enter key to trigger the button
+app.bind('<Return>', on_button_click)
 
 
 ## Image generation
