@@ -23,6 +23,3 @@ def generate_peptide_image(peptide_string):
 
 # Code to print the SMILES format
 # print("The SMILES of the peptide is: {}".format(Chem.MolToSmiles(romol)))
-
-
-# Does difference between HELM and BILN matter??

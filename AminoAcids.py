@@ -1,3 +1,5 @@
+# Potential start to a "Database" of Amino Acids
+
 amino_acid_dict = {
     "A": ["Alanine", "Ala"],
     "R": ["Arginine", "Arg"],

@@ -4,7 +4,7 @@ def format_peptide_sequence(input_string):
     return input_string.replace('-', '')
 
 def calculate_mass_and_charge(peptide):
-    # Calculate the monoisotopic mass
+    # Calculate the mass
     peptide_mass = mass.calculate_mass(sequence=peptide)
     
     # Calculate the charge.
@@ -16,4 +16,4 @@ def calculate_mass_and_charge(peptide):
 # DOES NOT WORK FOR AMINO ACIDS LIKE (am, ac, etc...)
 
 
-# example_peptide_sequence_input = "ACDEFGHIK"  #
+# example_peptide_sequence_input = "ACDEFGHIK"

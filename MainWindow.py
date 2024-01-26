@@ -1,7 +1,6 @@
 import tkinter as tk
 from tkinter import ttk
 from tkinter import PhotoImage
-from AminoAcids import amino_acid_dict
 from PyPeptBuilder import generate_peptide_image
 from Calculations import format_peptide_sequence, calculate_mass_and_charge
 
@@ -85,27 +84,3 @@ charge_label.pack(side='top', pady=5, fill="x")
 
 # Start the application
 app.mainloop()
-
-
-
-
-################################## code that might be useful later
-
-### Combo Boxes to collect input
-# # Frame to hold the first row of combo boxes
-# combo_frame_one = tk.Frame(app)
-# combo_frame_one.pack(pady=10)  # Adding some padding for better spacing
-
-# # Create and pack the top 5 combo boxes
-# for i in range(5):
-#     # combo = ttk.Combobox(combo_frame_one, values=[f"Option {j+1}" for j in range(5)])  # past way to populate combobox
-#     combo = ttk.Combobox(combo_frame_one, values=list(amino_acid_dict.keys()))
-#     combo.pack(side=tk.LEFT, padx=5)  # Pack each combo box side by side with some padding
-
-
-### Various Button Click stuff 
-# def on_button_click():
-#     # button_label.config(text="Button Clicked!")
-#     # selected_value = combo.get()      # use later to display whole AA sequence
-#     # label.config(text=f"Selected: {selected_value}")
-#     amino_acid_string = entry.get()  # Assuming 'entry' is your input widget
