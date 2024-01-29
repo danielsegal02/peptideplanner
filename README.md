@@ -1,4 +1,4 @@
-# peptideplanner
+# Peptide Planner
 
 
 Currently, there are four files:
