@@ -15,7 +15,7 @@ Currently, there are four files:
 Setup:
 - Install python if you don't already have it downloaded. I believe it should be python 3.9.
 - Install PyPept:
-    - pip install pypept
+    - pip install git+https://github.com/Boehringer-Ingelheim/pyPept.git
 - Install Pyteomics:
     - pip install pyteomics
  
