@@ -1,6 +1,3 @@
-def format_peptide_sequence(input_string):
-    return input_string.replace('-', '')
-
 def calculate_mass(peptide_string):
     ###
     # Process to calculate Mass:
@@ -8,6 +5,8 @@ def calculate_mass(peptide_string):
         # multiply the mass of water by the number of bonds (n-1 where n = the number of amino acids)
         # subtract multiplied value from the summed mass of all the amino acids
     ###
+    peptide_string = peptide_string.replace('-', '')    # removes all dashes from the input_string
+
     mass_of_water = 18.01528    # fixed mass of water
     mass = 0    # initialize mass variable
     number_of_AA = 0    # initialize number of amino acids variable
