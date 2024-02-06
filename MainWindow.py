@@ -1,8 +1,8 @@
 import tkinter as tk
 from tkinter import ttk
 from tkinter import PhotoImage
-from PyPeptBuilder import generate_peptide_image
-from Calculations import format_peptide_sequence, calculate_mass_and_charge
+from ImageGenerator import generate_peptide_image
+from Calculations import format_peptide_sequence, calculate_mass
 
 # Function to be called when the button is clicked
 def on_button_click(event=None):
@@ -15,9 +15,9 @@ def on_button_click(event=None):
     
     # Calculates the mass and net charge
     formatted_peptide = format_peptide_sequence(amino_acid_string)
-    mass, charge = calculate_mass_and_charge(formatted_peptide)
+    mass = calculate_mass(formatted_peptide)
     mass_label.config(text=f"Mass: {mass}")  # Update mass label
-    charge_label.config(text=f"Net Charge: {charge}")  # Update charge label
+    # charge_label.config(text=f"Net Charge: {charge}")  # Update charge label
 
 
 # Create the main application window
