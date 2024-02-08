@@ -1,0 +1,24 @@
+﻿Code,Name,SMILES,Charge
+O,Ornithine ,NCCCC(N)C(=O)O,1
+U,Selenocysteine,N[C@@H](C[SeH])C(=O)O,0
+Z,Pentafluorophenyl Alanine,N[C@H](Cc1c(F)c(F)c(F)c(F)c1F)C(=O)O,0
+K,Lysine ,NCCCC[C@@H](C(=O)O)N,1
+R,Argenine ,C(C[C@@H](C(=O)O)N)CN=C(N)N,1
+H,Histidine,C1=C(NC=N1)C[C@@H](C(=O)O)N,0
+D,Aspartic Acid,C([C@@H](C(=O)O)N)C(=O)O,0
+E,Glutamic Acid,C(CC(=O)O)[C@@H](C(=O)O)N,0
+S,Serine,C([C@@H](C(=O)O)N)O,0
+T,Threonine,C[C@H]([C@@H](C(=O)O)N)O,0
+N,Asparagine,C([C@@H](C(=O)O)N)C(=O)N,0
+Q,Glutamine,C(CC(=O)N)[C@@H](C(=O)O)N,0
+C,Cysteine,C([C@@H](C(=O)O)N)S,0
+G,Glycine,C(C(=O)O)N,0
+P,Proline,C1C[C@H](NC1)C(=O)O,0
+A,Alanine,C[C@@H](C(=O)O)N,0
+V,Valine,CC(C)[C@@H](C(=O)O)N,0
+I,Isoleucine,CC[C@H](C)[C@@H](C(=O)O)N,0
+L,Leucine,CC(C)C[C@@H](C(=O)O)N,0
+M,Methionine ,CSCC[C@@H](C(=O)O)N,0
+F,Phenylalanine,C1=CC=C(C=C1)C[C@@H](C(=O)O)N,0
+Y,Tyrosine,C1=CC(=CC=C1C[C@@H](C(=O)O)N)O,0
+W,Tryptophan,C1=CC=C2C(=C1)C(=CN2)C[C@@H](C(=O)O)N,0
