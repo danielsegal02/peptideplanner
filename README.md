@@ -25,3 +25,6 @@ To run the application:
 2. cd into the directory that has the repo cloned into it.
 3. run this command in the terminal to start the application:
     python MainWindow.py
+
+Example Input:
+    D-T-H-F-E-I-A
