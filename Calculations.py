@@ -20,4 +20,5 @@ def calculate_mass(peptide_string):
     mass = mass - bond_mass # calculate total mass
     return mass
 
-# example_peptide_sequence_input = "ACDEFGHIK"
+# example_peptide_sequence_input = "ARN" or "A-R-N" does not matter which is used currently
+# example mass output should be approximately 358
