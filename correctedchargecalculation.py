@@ -2,8 +2,6 @@ import pandas as pd
 
 aa_data = pd.read_csv('AminoAcidTable.csv')
 
-pep_string = input("Enter your peptide chain: ")
-
 def calculate_charge(pep_string):
 
     aa_array = [char for char in pep_string]
@@ -14,7 +12,9 @@ def calculate_charge(pep_string):
     
     print("The total charge of the peptide is: ", total_charge)
 
-calculate_charge(pep_string)
+    return(int(total_charge))
+
+
 
 
 
