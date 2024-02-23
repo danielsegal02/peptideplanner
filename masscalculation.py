@@ -1,5 +1,3 @@
-import plotly as py 
-
 import pandas as pd
 
 aa_data = pd.read_csv('AminoAcidTable.csv')
