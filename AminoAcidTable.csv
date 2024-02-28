@@ -1,0 +1,24 @@
+﻿Code,Name,SMILES,Charge,Residue Mass
+O,Ornithine ,NCCCC(N)C(=O)O,1,114.14472
+U,Selenocysteine,N[C@@H](C[SeH])C(=O)O,0,149.04472
+Z,Pentafluorophenyl Alanine,N[C@H](Cc1c(F)c(F)c(F)c(F)c1F)C(=O)O,0,237.12472
+K,Lysine ,NCCCC[C@@H](C(=O)O)N,1,128.09496
+R,Argenine ,C(C[C@@H](C(=O)O)N)CN=C(N)N,1,156.10111
+H,Histidine,C1=C(NC=N1)C[C@@H](C(=O)O)N,0,137.05891
+D,Aspartic Acid,C([C@@H](C(=O)O)N)C(=O)O,0,115.02694
+E,Glutamic Acid,C(CC(=O)O)[C@@H](C(=O)O)N,0,129.04259
+S,Serine,C([C@@H](C(=O)O)N)O,0,87.03203
+T,Threonine,C[C@H]([C@@H](C(=O)O)N)O,0,101.04768
+N,Asparagine,C([C@@H](C(=O)O)N)C(=O)N,0,114.04293
+Q,Glutamine,C(CC(=O)N)[C@@H](C(=O)O)N,0,128.05858
+C,Cysteine,C([C@@H](C(=O)O)N)S,0,103.00919
+G,Glycine,C(C(=O)O)N,0,57.02146
+P,Proline,C1C[C@H](NC1)C(=O)O,0,97.05276
+A,Alanine,C[C@@H](C(=O)O)N,0,71.03711
+V,Valine,CC(C)[C@@H](C(=O)O)N,0,99.06841
+I,Isoleucine,CC[C@H](C)[C@@H](C(=O)O)N,0,113.08406
+L,Leucine,CC(C)C[C@@H](C(=O)O)N,0,113.08406
+M,Methionine ,CSCC[C@@H](C(=O)O)N,0,131.04049
+F,Phenylalanine,C1=CC=C(C=C1)C[C@@H](C(=O)O)N,0,147.06841
+Y,Tyrosine,C1=CC(=CC=C1C[C@@H](C(=O)O)N)O,0,163.06333
+W,Tryptophan,C1=CC=C2C(=C1)C(=CN2)C[C@@H](C(=O)O)N,0,186.07931

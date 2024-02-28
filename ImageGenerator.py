@@ -1,7 +1,20 @@
-# RDKit modules
+import pandas as pd
 from rdkit import Chem
 from rdkit.Chem import Draw
 from rdkit.Chem import rdChemReactions
+
+def get_smiles_from_code(code_string):
+    # Load the CSV file
+    df = pd.read_csv("AminoAcidTable.csv")
+    
+    # Map each code to its SMILES representation
+    code_to_smiles = df.set_index('Code')['SMILES'].to_dict()
+    
+    # Convert the code string to a list of corresponding SMILES
+    smiles_list = [code_to_smiles[code] for code in code_string if code in code_to_smiles]
+    
+    return smiles_list
+
 
 def combine_smiles(amino_acids_smiles):
     """
@@ -13,12 +26,6 @@ def combine_smiles(amino_acids_smiles):
     Returns:
         str: A single SMILES string representing the peptide.
     """
-    amino_acids_smiles = [                    # currently hard-coded, but will call a function that creates this list based on the correlating smiles in the csv
-    "N[C@@H](C)C(=O)O",  # Alanine
-    "N[C@@H](CCCNC(=N)N)C(=O)O",  # Arginine
-    "N[C@@H](CC(=O)N)C(=O)O"  # Asparagine
-    ]
-    
     # Initialize an empty molecule that will serve as the base for the peptide chain
     peptide_mol = Chem.RWMol()
 
@@ -49,12 +56,9 @@ def combine_smiles(amino_acids_smiles):
 
 
 def generate_peptide_image(pep_str):
-    final_smiles = combine_smiles(pep_str)
-    mol = Chem.MolFromSmiles(final_smiles)    # currently hard-coded, but later make it turn the peptide_string to the mapped smiles, then use it to make the image
+    pep_smiles_lst = get_smiles_from_code(pep_str)
+    final_smiles = combine_smiles(pep_smiles_lst)
+    mol = Chem.MolFromSmiles(final_smiles)
     image_path = 'peptide_image.png'
     Draw.MolToFile(mol, image_path, size=(600, 200))  #customize size to window size if possible
     return image_path
-
-
-# Test Amino Acid input
-# biln = "ac-D-T-H-F-E-I-A-am"

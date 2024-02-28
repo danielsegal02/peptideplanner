@@ -1,24 +1,29 @@
+import pandas as pd
+
 def calculate_mass(peptide_string):
-    ###
-    # Process to calculate Mass:
-        # add the mass of each amino acid in the chain
-        # multiply the mass of water by the number of bonds (n-1 where n = the number of amino acids)
-        # subtract multiplied value from the summed mass of all the amino acids
-    ###
-    peptide_string = peptide_string.replace('-', '')    # removes all dashes from the input_string
+    # In case the input box is empty
+    if peptide_string == "":
+        return 0
 
-    mass_of_water = 18.01528    # fixed mass of water
-    mass = 0    # initialize mass variable
-    number_of_AA = 0    # initialize number of amino acids variable
-   
-    for amino_acid in peptide_string:
-        #mass += amino_acid.mass # sum the mass of each amino acid from the "Database"  
-        number_of_AA += 1   # increment the number of amino acids with each iteration
+    # Load the CSV file
+    df = pd.read_csv("AminoAcidTable.csv")
+    
+    # Map each code to its Residue Mass
+    code_to_mass = df.set_index('Code')['Residue Mass'].to_dict()
+    
+    # Sum the Residue Mass for each code in the string
+    total_mass = sum([code_to_mass[code] for code in peptide_string if code in code_to_mass]) + 18.01528
+    
+    return total_mass
 
-    mass += 89 + 174 + 132  # currently hard-coded just to test the function
-    bond_mass = mass_of_water * (number_of_AA-1)    # find the mass of the bonds (mass of water - number of bonds)
-    mass = mass - bond_mass # calculate total mass
-    return mass
-
-# example_peptide_sequence_input = "ARN" or "A-R-N" does not matter which is used currently
-# example mass output should be approximately 358
+def calculate_charge(peptide_string):
+    # Load the CSV file
+    df = pd.read_csv("AminoAcidTable.csv")
+    
+    # Map each code to its Charge
+    code_to_charge = df.set_index('Code')['Charge'].to_dict()
+    
+    # Sum the Charge for each code in the string
+    total_charge = sum([code_to_charge[code] for code in peptide_string if code in code_to_charge])
+    
+    return total_charge
