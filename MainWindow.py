@@ -6,14 +6,15 @@ from Calculations import calculate_mass, calculate_charge
 
 # Function to be called when the button is clicked
 def on_button_click(event=None):
-    # Generates the image
     amino_acid_string = entry.get() 
+
+    # Generates and displays the image
     image_path = generate_peptide_image(amino_acid_string)
     photo = PhotoImage(file=image_path)
     image_label.config(image=photo)
     image_label.image = photo  # Keep a reference
     
-    # Calculates the mass and net charge
+    # Calculates and displays the mass and net charge
     mass = calculate_mass(amino_acid_string)
     mass_label.config(text=f"Mass: {mass}")  # Update mass label
     charge = calculate_charge(amino_acid_string)
@@ -26,14 +27,15 @@ app.title("Peptide Planner")
 app.minsize(800, 500)
 app.configure(background="white")
 
-## Create and pack the initial label, input box, and Button
+## Top text and input box
 # First label on the window
 top_label = tk.Label(app, background="white", text="Welcome to the Peptide Planner!", font=("Verdana", 16))
 top_label.pack(pady=10)
 # Input text box
 entry = tk.Entry(app, width=50, background="light gray", font=('Arial 12'))
-entry.pack(padx=10, pady=10)  # To Do Later: restrict what user can input (i.e. empty string, format it then pass it in, etc...)
-# Button
+entry.pack(padx=10, pady=10)
+
+## Button
 # Create a style object
 style = ttk.Style()
 # Configure a more modern-looking button style
