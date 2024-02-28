@@ -11,7 +11,7 @@ def calculate_mass(peptide_string):
     # Map each code to its Residue Mass
     code_to_mass = df.set_index('Code')['Residue Mass'].to_dict()
     
-    # Sum the Residue Mass for each code in the string
+    # Sum the Residue Mass for each code in the string (and account for the extra missing water mass)
     total_mass = sum([code_to_mass[code] for code in peptide_string if code in code_to_mass]) + 18.01528
     
     return total_mass
