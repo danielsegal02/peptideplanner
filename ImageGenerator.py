@@ -60,5 +60,5 @@ def generate_peptide_image(pep_str):
     final_smiles = combine_smiles(pep_smiles_lst)
     mol = Chem.MolFromSmiles(final_smiles)
     image_path = 'peptide_image.png'
-    Draw.MolToFile(mol, image_path, size=(600, 250))  #customize size to window size if possible
+    Draw.MolToFile(mol, image_path, size=(600, 230))  #customize size to window size if possible
     return image_path
