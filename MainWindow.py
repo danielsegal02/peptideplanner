@@ -7,17 +7,21 @@ from Calculations import calculate_mass, calculate_charge
 # Function to be called when the button is clicked
 def on_button_click(event=None):
     amino_acid_string = entry.get() 
+    uppercase_AA_string = amino_acid_string.upper()
+    # Update the entry with uppercase text
+    entry.delete(0, tk.END)  # Remove the current text
+    entry.insert(0, uppercase_AA_string)  # Insert the uppercase text
 
     # Generates and displays the image
-    image_path = generate_peptide_image(amino_acid_string)
+    image_path = generate_peptide_image(uppercase_AA_string)
     photo = PhotoImage(file=image_path)
     image_label.config(image=photo)
     image_label.image = photo  # Keep a reference
     
     # Calculates and displays the mass and net charge
-    mass = calculate_mass(amino_acid_string)
+    mass = calculate_mass(uppercase_AA_string)
     mass_label.config(text=f"Mass: {mass}")  # Update mass label
-    charge = calculate_charge(amino_acid_string)
+    charge = calculate_charge(uppercase_AA_string)
     charge_label.config(text=f"Net Charge: {charge}")  # Update charge label
 
 
