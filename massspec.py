@@ -33,5 +33,4 @@ plt.xlabel("m/z")
 
 plt.ylabel("Intensity")
 
-plt.show()
-        
+plt.savefig("massspec.png")
