@@ -1,22 +1,42 @@
 import pandas as pd
 
-aa_data = pd.read_csv('AminoAcidTable.csv')
+from collections import Counter
 
-def calculate_mass(pep_string):
+def char_occ(pep_string):
+    char_count = Counter(pep_string)
+    return dict(char_count)
+
+def filter_dataframe_mass(aa_data, pep_string):
 
     aa_array = [char for char in pep_string]
+    
+    filtered_df = aa_data[aa_data['Code'].isin(aa_array)]
+    
+    result_dict = dict(zip(filtered_df['Code'], filtered_df['Residue Mass']))
+    
+    return result_dict
 
-    filtered_aa = aa_data[(aa_data["Code"].isin(aa_array))]
+def multiply_dictionaries(dict1, dict2):
 
-    peptide_mass = filtered_aa["Residue Mass"].sum()
+    result_dict = {key: value * dict2[key] for key, value in dict1.items()}
 
-    peptide_mass = int(peptide_mass + 18.01528)
+    return result_dict
 
-    print("The total mass of the peptide is: ", peptide_mass)
+def calculate_mass():
 
-    return(int(peptide_mass))
+    aa_data = pd.read_csv('AminoAcidTable.csv')
 
+    aa_chain = input("Enter your amino acid chain: ")
 
+    char_count = char_occ(aa_chain)
 
+    filt_mass = filter_dataframe_mass(aa_data, char_count.keys())
 
+    final_dict = multiply_dictionaries(char_count, filt_mass)
 
+    return final_dict
+
+def sum_mass():
+    result = calculate_mass()
+    result_mass = sum(result.values()) + 18.01
+    return result_mass
