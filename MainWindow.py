@@ -111,7 +111,7 @@ notebook.pack(fill='both', expand=True, padx=10, pady=10)
 
 ### Tab 1 for image and mass/charge info
 tab1 = ttk.Frame(notebook)
-notebook.add(tab1, text='Structure, Mass, Charge')
+notebook.add(tab1, text='Mass & Charge')
 
 ## Image generation
 # Frame to hold the image
@@ -143,17 +143,12 @@ notebook.add(tab2, text='Mass Spectrometry')
 
 ### Tab 3 for _________________
 tab3 = ttk.Frame(notebook)
-notebook.add(tab3, text='Third Tab')
+notebook.add(tab3, text='Conjugation')
 
 
 ### Tab 4 for _________________
 tab4 = ttk.Frame(notebook)
-notebook.add(tab4, text='Fourth Tab')
-
-
-### Tab 5 for _________________
-tab5 = ttk.Frame(notebook)
-notebook.add(tab5, text='Fifth Tab')
+notebook.add(tab4, text='Structure')
 
 
 # Start the application
