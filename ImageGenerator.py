@@ -65,7 +65,7 @@ def generate_peptide_image(pep_str):
     return image_path
 
 def generate_mass_spec(mass, charge):
-    plt.figure(figsize=(4, 3.5)) 
+    plt.figure(figsize=(6, 3.5)) 
     peaks = [0 for i in range(charge)]
 
     while charge > 0:
