@@ -64,7 +64,7 @@ def generate_peptide_image(pep_str):
     Draw.MolToFile(mol, image_path, size=(600, 230))  #customize size to window size if possible
     return image_path
 
-def generate_mass_spec(mass, charge, file_path="Images/MassSpec.png"):
+def generate_mass_spec(mass, charge):
     plt.figure(figsize=(4, 3.5)) 
     peaks = [0 for i in range(charge)]
 
@@ -78,6 +78,8 @@ def generate_mass_spec(mass, charge, file_path="Images/MassSpec.png"):
 
     plt.xlabel("m/z")
     plt.ylabel("Intensity")
+
+    file_path="Images/MassSpec.png"
     plt.savefig(file_path, bbox_inches="tight")
     plt.close()  # Close the plot to free up memory
     return file_path
