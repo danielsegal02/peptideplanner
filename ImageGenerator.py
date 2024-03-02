@@ -1,4 +1,5 @@
 import pandas as pd
+import matplotlib.pyplot as plt
 from rdkit import Chem
 from rdkit.Chem import Draw
 from rdkit.Chem import rdChemReactions
@@ -62,3 +63,21 @@ def generate_peptide_image(pep_str):
     image_path = 'peptide_image.png'
     Draw.MolToFile(mol, image_path, size=(600, 230))  #customize size to window size if possible
     return image_path
+
+def generate_mass_spec(mass, charge, file_path="MassSpec.png"):
+    plt.figure(figsize=(4, 3.5)) 
+    peaks = [0 for i in range(charge)]
+
+    while charge > 0:
+        peaks[charge - 1] = mass / charge
+        charge -= 1
+
+    for i in range(len(peaks)):
+        plt.axvline(peaks[i], ymin=0, ymax=0.8)
+        plt.text(peaks[i], 0.81, round(peaks[i], 1), ha='center', va='center')
+
+    plt.xlabel("m/z")
+    plt.ylabel("Intensity")
+    plt.savefig(file_path, bbox_inches="tight")
+    plt.close()  # Close the plot to free up memory
+    return file_path

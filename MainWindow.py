@@ -1,22 +1,28 @@
 import tkinter as tk
 from tkinter import PhotoImage, ttk, Toplevel
-from ImageGenerator import generate_peptide_image
+from ImageGenerator import generate_peptide_image, generate_mass_spec
 from Calculations import calculate_mass, calculate_charge
 
 # Function to be called when the button is clicked
 def on_button_click(event=None):
     amino_acid_string = entry.get()
     # Generates and displays the image in the first tab
-    image_path = generate_peptide_image(amino_acid_string)
-    photo = PhotoImage(file=image_path)
-    image_label.config(image=photo)
-    image_label.image = photo  # Keep a reference
+    chem_struct_image_path = generate_peptide_image(amino_acid_string)
+    chem_struct_photo = PhotoImage(file=chem_struct_image_path)
+    chem_struct_image_label.config(image=chem_struct_photo)
+    chem_struct_image_label.image = chem_struct_photo  # Keep a reference
     
     # Calculates and displays the mass and net charge in the first tab
     mass = calculate_mass(amino_acid_string)
     mass_label.config(text=f"Mass: {mass}")  # Update mass label
     charge = calculate_charge(amino_acid_string)
     charge_label.config(text=f"Net Charge: {charge}")  # Update charge label
+
+    # Calculates and displays the mass spec in the second tab
+    image_path = generate_mass_spec(mass, charge)
+    mass_spec_photo = PhotoImage(file=image_path)
+    mass_spec_image_label.config(image=mass_spec_photo)
+    mass_spec_image_label.image = mass_spec_photo  # Keep a reference
 
 
 def open_tutorial():
@@ -113,16 +119,16 @@ notebook.pack(fill='both', expand=True, padx=10, pady=10)
 tab1 = ttk.Frame(notebook)
 notebook.add(tab1, text='Mass & Charge')
 
-## Image generation
+## Chemical structure image generation
 # Frame to hold the image
-image_frame = tk.Frame(tab1)
-image_frame.configure(background="white")
-image_frame.pack(fill='both', expand=True, padx=10, pady=10)
-# Initialize the image_label with an empty image or placeholder
-placeholder_image = tk.PhotoImage()  # A blank PhotoImage object
-image_label = tk.Label(image_frame, image=placeholder_image)
-image_label.photo = placeholder_image  # Keep a reference
-image_label.pack(padx=10, pady=10)
+chem_struct_image_frame = tk.Frame(tab1)
+chem_struct_image_frame.configure(background="white")
+chem_struct_image_frame.pack(fill='both', expand=True, padx=10, pady=10)
+# Initialize the chem_struct_image_label with an empty image or placeholder
+chem_struct_placeholder_image = tk.PhotoImage()  # A blank PhotoImage object
+chem_struct_image_label = tk.Label(chem_struct_image_frame, image=chem_struct_placeholder_image)
+chem_struct_image_label.photo = chem_struct_placeholder_image  # Keep a reference
+chem_struct_image_label.pack(padx=10, pady=10)
 
 ## Mass and Net Charge
 # Create a dedicated frame for the mass/charge labels
@@ -139,6 +145,17 @@ charge_label.pack(side='top', pady=5, fill="x")
 ### Tab 2 for mass spectrometry
 tab2 = ttk.Frame(notebook)
 notebook.add(tab2, text='Mass Spectrometry')
+
+## Mass Spec plot image generation
+# Frame to hold the image
+mass_spec_image_frame = tk.Frame(tab2)
+mass_spec_image_frame.configure(background="white")
+mass_spec_image_frame.pack(fill='both', expand=True, padx=10, pady=10)
+# Initialize the mass_spec_image_label with an empty image or placeholder
+mass_spec_placeholder_image = tk.PhotoImage()  # A blank PhotoImage object
+mass_spec_image_label = tk.Label(mass_spec_image_frame, image=mass_spec_placeholder_image)
+mass_spec_image_label.photo = mass_spec_placeholder_image  # Keep a reference
+mass_spec_image_label.pack(padx=10, pady=10)
 
 
 ### Tab 3 for _________________
