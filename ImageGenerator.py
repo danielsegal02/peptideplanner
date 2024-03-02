@@ -60,11 +60,11 @@ def generate_peptide_image(pep_str):
     pep_smiles_lst = get_smiles_from_code(pep_str)
     final_smiles = combine_smiles(pep_smiles_lst)
     mol = Chem.MolFromSmiles(final_smiles)
-    image_path = 'peptide_image.png'
+    image_path = 'Images/peptide_image.png'
     Draw.MolToFile(mol, image_path, size=(600, 230))  #customize size to window size if possible
     return image_path
 
-def generate_mass_spec(mass, charge, file_path="MassSpec.png"):
+def generate_mass_spec(mass, charge, file_path="Images/MassSpec.png"):
     plt.figure(figsize=(4, 3.5)) 
     peaks = [0 for i in range(charge)]
 
