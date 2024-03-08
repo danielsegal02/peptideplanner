@@ -1,5 +1,6 @@
 import tkinter as tk
 from tkinter import PhotoImage, ttk, Toplevel
+import pandas as pd
 from ImageGenerator import generate_peptide_image, generate_mass_spec
 from Calculations import calculate_mass, calculate_charge
 
@@ -28,7 +29,8 @@ def on_button_click(event=None):
 def open_tutorial():
     if not hasattr(open_tutorial, "is_open") or not open_tutorial.is_open:
         tutorial = Toplevel(app)
-        tutorial.title("New Window 1")
+        tutorial.title("Tutorial")
+        tutorial.minsize(300, 600)
         # This line re-enables the button when the window is closed.
         tutorial.protocol("WM_DELETE_WINDOW", lambda: on_close_tutorial(tutorial))
         open_tutorial.is_open = True
@@ -37,8 +39,26 @@ def open_tutorial():
 def open_legend():
     if not hasattr(open_legend, "is_open") or not open_legend.is_open:
         legend = Toplevel(app)
-        legend.title("New Window 2")
-        # This line re-enables the button when the window is closed.
+        legend.title("Amino Acid Legend")
+        legend.minsize(300, 600)
+        
+        # Create the treeview widget
+        columns = ("Code", "Name")
+        tree = ttk.Treeview(legend, columns=columns, show="headings")
+        tree.heading("Code", text="Input Code")
+        tree.heading("Name", text="Name")
+        
+        # Adjust the columns' width to the content
+        tree.column("Code", minwidth=50, width=100, anchor='center')
+        tree.column("Name", minwidth=100, width=150, anchor='center')
+        
+        # Read the CSV file using pandas and populate the treeview
+        df = pd.read_csv("AminoAcidTable.csv")
+        for index, row in df.iterrows():
+            tree.insert("", tk.END, values=(row["Code"], row["Name"]))
+                
+        tree.pack(expand=True, fill='both')
+        
         legend.protocol("WM_DELETE_WINDOW", lambda: on_close_legend(legend))
         open_legend.is_open = True
         legend_button["state"] = "disabled"
