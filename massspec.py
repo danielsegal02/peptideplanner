@@ -27,7 +27,7 @@ for i in range(len(peaks)):
 
     plt.axvline(peaks[i], ymin = 0, ymax = 0.8)
     
-    plt.text(peaks[i], 0.81, [round(peaks[i], 1), f'M + {i+1}'],fontsize = 5, ha='left', va='center')
+    plt.text(peaks[i], 0.81, [round(peaks[i], 1), f'M$^{i+1}$$^+$'],fontsize = 8, ha='left', va='center')
 
 
 plt.xlabel("m/z")
