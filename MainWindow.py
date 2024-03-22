@@ -52,17 +52,39 @@ def open_legend():
         tree.column("Code", minwidth=50, width=100, anchor='center')
         tree.column("Name", minwidth=100, width=150, anchor='center')
         
-        # Read the CSV file using pandas and populate the treeview
+        # Read the CSV file using pandas and populate the treeview with the amino acids columns
         df = pd.read_csv("AminoAcidTable.csv")
         for index, row in df.iterrows():
             tree.insert("", tk.END, values=(row["Code"], row["Name"]))
                 
         tree.pack(expand=True, fill='both')
+
+        # Define the Add Amino Acid button with a command that includes itself
+        add_AA_button = ttk.Button(legend, text="Add a new Amino Acid", command=lambda: open_add_AA_window(add_AA_button, legend))
+        add_AA_button.pack(pady=10)
         
         legend.protocol("WM_DELETE_WINDOW", lambda: on_close_legend(legend))
         open_legend.is_open = True
+        open_legend.add_AA_window = None  # Initially, there's no add_AA_window
         legend_button["state"] = "disabled"
 
+def open_add_AA_window(button, legend):
+    # Check if the add_AA_window is already open using a global variable or an attribute of the legend window
+    if not hasattr(legend, "add_AA_window_open") or not legend.add_AA_window_open:
+        add_AA_window = Toplevel(app)
+        add_AA_window.title("Add Amino Acids")
+        add_AA_window.geometry("300x200")
+        
+        label = tk.Label(add_AA_window, text="Add your amino acid details here.")
+        label.pack(pady=10)
+
+        button["state"] = "disabled"
+        legend.add_AA_window_open = True  # Mark the add_AA_window as open
+
+        # Instead of using open_add_AA_window.is_open, store the add_AA_window reference in the legend window for access during closure
+        legend.add_AA_window_ref = add_AA_window
+
+        add_AA_window.protocol("WM_DELETE_WINDOW", lambda: on_close_add_AA(add_AA_window, button, legend))
 
 def on_close_tutorial(window):
     open_tutorial.is_open = False
@@ -70,8 +92,21 @@ def on_close_tutorial(window):
     window.destroy()
 
 def on_close_legend(window):
+    # Check if the add_AA_window is open and close it if necessary
+    if hasattr(window, "add_AA_window_open") and window.add_AA_window_open:
+        if hasattr(window, "add_AA_window_ref"):
+            window.add_AA_window_ref.destroy()  # Close the add_AA_window if it's open
+            window.add_AA_window_ref = None
+    window.add_AA_window_open = False  # Reset the state
+    # Reset the legend is_open state and enable the legend button
     open_legend.is_open = False
     legend_button["state"] = "normal"
+    window.destroy()
+
+def on_close_add_AA(window, button, legend):
+    # Mark the add_AA_window as closed and enable the button for reopening it
+    legend.add_AA_window_open = False
+    button["state"] = "normal"
     window.destroy()
 
 
