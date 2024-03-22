@@ -27,11 +27,15 @@ for i in range(len(peaks)):
 
     plt.axvline(peaks[i], ymin = 0, ymax = 0.8)
     
-    plt.text(peaks[i], 0.81, [round(peaks[i], 1), f'M$^{i+1}$$^+$'],fontsize = 8, ha='left', va='center')
+    plt.text(peaks[i], 0.81, [round(peaks[i], 1),f'M$^{i+1}$$^+$'], fontsize = 10, ha='center', va='center', rotation = 30)
 
+    
 
+plt.xlim(0, max(peaks)+100)
 plt.xlabel("m/z")
 
 plt.ylabel("Intensity")
 
-plt.savefig("massspec.png")
+fig = plt.gcf()
+fig.set_size_inches(20, 10.5)
+fig.savefig('massspec.png')
