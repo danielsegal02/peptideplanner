@@ -133,9 +133,23 @@ tutorial_button.pack(side="left", fill="x", expand=True)
 legend_button = ttk.Button(button_frame, text="Open Legend", command=open_legend)
 legend_button.pack(side="right", fill="x", expand=True)
 
+
+## Entry box and Termini select boxes
+# Frame that entry and combo boxes will be packed in
+combo_entry_frame = tk.Frame(app)
+combo_entry_frame.pack(padx=10, pady=10)
+# Left Combo Box
+combo_options_left = ['Option 1', 'Option 2', 'Option 3']
+combo_box_left = ttk.Combobox(combo_entry_frame, values=combo_options_left, state="readonly", width=15)
+combo_box_left.pack(side='left', padx=(0, 5))  # Pack to the left side with some padding
 # Input text box
-entry = tk.Entry(app, width=50, background="light gray", font=('Arial 12'))
-entry.pack(padx=10, pady=10)
+entry = tk.Entry(combo_entry_frame, width=50, background="light gray", font=('Arial 12'))
+entry.pack(side='left', padx=5)
+# Right Combo Box
+combo_options_right = ['A', 'B', 'C']
+combo_box_right = ttk.Combobox(combo_entry_frame, values=combo_options_right, state="readonly", width=15)
+combo_box_right.pack(side='left', padx=(5, 0))  # Pack to the left side, which effectively places it to the right of the entry
+
 
 ## Generate Peptide Button
 # Configure a more modern-looking button style
