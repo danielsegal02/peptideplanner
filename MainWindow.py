@@ -30,11 +30,46 @@ def open_tutorial():
     if not hasattr(open_tutorial, "is_open") or not open_tutorial.is_open:
         tutorial = Toplevel(app)
         tutorial.title("Tutorial")
-        tutorial.minsize(300, 600)
-        # This line re-enables the button when the window is closed.
+        tutorial.geometry("600x600")
         tutorial.protocol("WM_DELETE_WINDOW", lambda: on_close_tutorial(tutorial))
         open_tutorial.is_open = True
         tutorial_button["state"] = "disabled"
+
+        # Tutorial Title
+        tutorial_title = tk.Label(tutorial, text="Tutorial", font=("Arial", 18, "bold"))
+        tutorial_title.pack(pady=(10, 5))
+
+        # Tutorial Content
+        tutorial_text = """
+1. In the gray text box toward the top of the screen, enter the desired amino acid sequence. Be sure to type each amino acid using its corresponding letter/symbol as listed in the Legend. (For reference, you can click “Open Legend”)
+
+2. Click “Generate Peptide” to populate the functions under all tabs. The chemical structure, mass, and net charge of the peptide should appear on the first page of the application.
+
+3. To view the predicted mass spectrometry graph, click the “Mass Spectrometry” tab.
+
+4. To do reagent calculations, click the “Conjugation” tab.
+
+5. To view the predicted secondary structure, click the “Structure” tab.
+
+6. To enter a new amino acid sequence, clear the gray text box at the top and type in the new sequence. Click “Generate Peptide”.
+        """
+
+        # Create a Text widget for the tutorial content
+        tutorial_content = tk.Text(tutorial, wrap="word", font=("Arial", 12), bg="light grey", borderwidth=2, relief="solid")
+        tutorial_content.insert("1.0", tutorial_text)
+
+        # Define a tag for bold and slightly larger font for the numbers
+        tutorial_content.tag_configure("list_number", font=("Arial", 14, "bold"))
+
+        # Find all occurrences of a pattern (in this case, the numbers followed by a period)
+        import re
+        for match in re.finditer(r"\d+\.", tutorial_text):
+            start = "1.0 + {} chars".format(match.start())
+            end = "1.0 + {} chars".format(match.end())
+            tutorial_content.tag_add("list_number", start, end)
+
+        tutorial_content.config(state="disabled")  # Make the text widget read-only
+        tutorial_content.pack(padx=10, pady=10, fill="both", expand=True)
 
 def open_legend():
     if not hasattr(open_legend, "is_open") or not open_legend.is_open:
