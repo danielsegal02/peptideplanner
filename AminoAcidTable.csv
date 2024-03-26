@@ -22,3 +22,25 @@ M,Methionine ,CSCC[C@@H](C(=O)O)N,0,131.04049
 F,Phenylalanine,C1=CC=C(C=C1)C[C@@H](C(=O)O)N,0,147.06841
 Y,Tyrosine,C1=CC(=CC=C1C[C@@H](C(=O)O)N)O,0,163.06333
 W,Tryptophan,C1=CC=C2C(=C1)C(=CN2)C[C@@H](C(=O)O)N,0,186.07931
+o,d-Ornithine ,C(C[C@H](C(=O)O)N)CN,1,114.14472
+u,d-Selenocysteine,C([C@H](C(=O)O)N)[Se],0,149.04472
+z,d-Pentafluorophenyl Alanine,,0,237.12472
+k,d-Lysine ,C(CCN)C[C@H](C(=O)O)N,1,128.09496
+r,d-Argenine ,C(C[C@H](C(=O)O)N)CN=C(N)N,1,156.10111
+h,d-Histidine,C1=C(NC=N1)C[C@H](C(=O)O)N,0,137.05891
+d,d-Aspartic Acid,C([C@H](C(=O)O)N)C(=O)O,0,115.02694
+e,d-Glutamic Acid,C(CC(=O)O)[C@H](C(=O)O)N,0,129.04259
+s,d-Serine,C([C@H](C(=O)O)N)O,0,87.03203
+t,d-Threonine,C[C@@H]([C@H](C(=O)O)N)O,0,101.04768
+n,d-Asparagine,C([C@H](C(=O)O)N)C(=O)N,0,114.04293
+q,d-Glutamine,C(CC(=O)N)[C@H](C(=O)O)N,0,128.05858
+c,d-Cysteine,C([C@H](C(=O)O)N)SSC[C@H](C(=O)O)N,0,103.00919
+p,d-Proline,C1C[C@@H](NC1)C(=O)O,0,97.05276
+a,d-Alanine,C[C@H](C(=O)O)N,0,71.03711
+v,d-Valine,CC(C)[C@H](C(=O)O)N,0,99.06841
+i,d-Isoleucine,CC[C@@H](C)[C@H](C(=O)O)N,0,113.08406
+l,d-Leucine,CC(C)C[C@H](C(=O)O)N,0,113.08406
+m,d-Methionine ,CSCC[C@H](C(=O)O)N,0,131.04049
+f,d-Phenylalanine,C1=CC=C(C=C1)C[C@H](C(=O)O)N,0,147.06841
+w,d-Tyrosine,C1=CC(=CC=C1C[C@H](C(=O)O)N)O,0,163.06333
+y,d-Tryptophan,C1=CC=C2C(=C1)C(=CN2)C[C@H](C(=O)O)N,0,186.07931
