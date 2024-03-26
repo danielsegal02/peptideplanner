@@ -1,0 +1,171 @@
+Metadata-Version: 2.1
+Name: pyteomics
+Version: 4.6.3
+Summary: A framework for proteomics data analysis.
+Home-page: http://pyteomics.readthedocs.io
+Author: Anton Goloborodko & Lev Levitsky
+Author-email: pyteomics@googlegroups.com
+License: License :: OSI Approved :: Apache Software License
+Project-URL: Documentation, http://pyteomics.readthedocs.io
+Project-URL: Source Code, https://github.com/levitsky/pyteomics
+Project-URL: Issue Tracker, https://github.com/levitsky/pyteomics/issues
+Project-URL: Mailing List, https://groups.google.com/group/pyteomics
+Classifier: Intended Audience :: Science/Research
+Classifier: Programming Language :: Python :: 2.7
+Classifier: Programming Language :: Python :: 3
+Classifier: Topic :: Education
+Classifier: Topic :: Scientific/Engineering :: Bio-Informatics
+Classifier: Topic :: Scientific/Engineering :: Chemistry
+Classifier: Topic :: Scientific/Engineering :: Physics
+Classifier: Topic :: Software Development :: Libraries
+License-File: LICENSE
+License-File: NOTICE
+License-File: AUTHORS
+Provides-Extra: df
+Requires-Dist: pandas >=0.17 ; extra == 'df'
+Provides-Extra: tda
+Requires-Dist: numpy ; extra == 'tda'
+Provides-Extra: unimod
+Requires-Dist: lxml ; extra == 'unimod'
+Requires-Dist: sqlalchemy ; extra == 'unimod'
+Provides-Extra: xml
+Requires-Dist: lxml ; extra == 'xml'
+Requires-Dist: numpy ; extra == 'xml'
+Provides-Extra: all
+Requires-Dist: scikit-learn ; extra == 'all'
+Requires-Dist: lxml ; extra == 'all'
+Requires-Dist: numpy ; extra == 'all'
+Requires-Dist: matplotlib ; extra == 'all'
+Requires-Dist: pandas >=0.17 ; extra == 'all'
+Requires-Dist: sqlalchemy ; extra == 'all'
+Requires-Dist: pynumpress ; extra == 'all'
+Requires-Dist: h5py ; extra == 'all'
+Requires-Dist: hdf5plugin ; extra == 'all'
+Requires-Dist: psims >v0.1.42 ; extra == 'all'
+Provides-Extra: graphics
+Requires-Dist: matplotlib ; extra == 'graphics'
+Provides-Extra: mzmlb
+Requires-Dist: h5py ; extra == 'mzmlb'
+Requires-Dist: hdf5plugin ; extra == 'mzmlb'
+Provides-Extra: numpress
+Requires-Dist: pynumpress ; extra == 'numpress'
+Provides-Extra: proforma
+Requires-Dist: psims >v0.1.42 ; extra == 'proforma'
+
+.. image:: https://github.com/levitsky/pyteomics/workflows/tests/badge.svg
+   :target: https://github.com/levitsky/pyteomics/actions?query=workflow%3Atests
+   :alt: Test status
+
+.. image:: https://img.shields.io/pypi/v/pyteomics.svg
+    :target: https://pypi.org/project/pyteomics/
+    :alt: PyPI
+
+.. image:: https://img.shields.io/conda/vn/bioconda/pyteomics
+    :target: http://bioconda.github.io/recipes/pyteomics/README.html
+    :alt: conda
+
+.. image:: https://img.shields.io/readthedocs/pyteomics.svg
+    :target: https://pyteomics.readthedocs.io/
+    :alt: Read the Docs (latest)
+
+.. image:: https://img.shields.io/github/license/levitsky/pyteomics
+    :target: https://www.apache.org/licenses/LICENSE-2.0
+    :alt: Apache License
+
+.. image:: https://img.shields.io/aur/version/python-pyteomics.svg
+    :target: https://aur.archlinux.org/packages/python-pyteomics/
+    :alt: python-pyteomics on AUR
+
+.. image:: https://img.shields.io/badge/pyteomics-awesome-orange.svg
+    :alt: Pyteomics is awesome
+
+
+What is Pyteomics?
+------------------
+
+Pyteomics is a collection of lightweight and handy tools for Python that help
+to handle various sorts of proteomics data. Pyteomics provides a growing set of
+modules to facilitate the most common tasks in proteomics data analysis, such as:
+
+* calculation of basic physico-chemical properties of polypeptides:
+
+  * mass and isotopic distribution
+  * charge and pI
+  * chromatographic retention time
+
+* access to common proteomics data:
+
+  * MS or LC-MS data
+  * FASTA databases
+  * search engines output
+
+* easy manipulation of sequences of modified peptides and proteins
+
+The goal of the Pyteomics project is to provide a versatile, reliable and
+well-documented set of open tools for the wide proteomics community.
+One of the project's key features is Python itself, an open source language
+increasingly popular in scientific programming. The main
+applications of the library are reproducible statistical data analysis and rapid
+software prototyping.
+
+Supported Python versions
+-------------------------
+
+Pyteomics supports Python 2.7 and Python 3.3+.
+
+
+Install with pip
+----------------
+
+The main way to obtain Pyteomics is via `pip Python package manager <https://pip.pypa.io/>`_::
+
+    pip install pyteomics
+
+
+Install with conda
+------------------
+
+You can also install Pyteomics from `Bioconda <https://bioconda.github.io/index.html>`_
+using `conda <https://docs.conda.io/projects/conda/en/latest/index.html>`_::
+
+    conda install -c bioconda pyteomics
+
+
+Arch-based distros
+..................
+
+On Arch Linux and related distros, you can install Pyteomics from AUR:
+`python-pyteomics <https://aur.archlinux.org/packages/python-pyteomics/>`_
+
+Project dependencies
+--------------------
+
+Some functionality in Pyteomics relies on other packages:
+
+ - `numpy <https://numpy.org/>`_;
+ - `matplotlib <https://matplotlib.org/>`_ (used by **pyteomics.pylab_aux**);
+ - `lxml <https://lxml.de/>`_ (used by XML parsing modules and **pyteomics.mass.mass.Unimod**);
+ - `pandas <https://pandas.pydata.org/>`_ (can be used with **pyteomics.pepxml**,
+   **pyteomics.tandem**, **pyteomics.mzid**, **pyteomics.auxiliary**);
+ - `sqlalchemy <https://www.sqlalchemy.org/>`_ (used by **pyteomics.mass.unimod**);
+ - `pynumpress <https://pypi.org/project/pynumpress/>`_ (adds support for Numpress compression in mzML);
+ - `h5py <https://www.h5py.org/>`_ and optionally `hdf5plugin <https://hdf5plugin.readthedocs.io/en/latest/>`_
+   (used by **pyteomics.mzmlb**);
+ - `psims <https://mobiusklein.github.io/psims/docs/build/html/>`_ (used py **pyteomics.proforma**);
+ - `spectrum_utils <https://spectrum-utils.readthedocs.io/en/latest/>`_ (optionally used for spectrum annotation in
+   **pyteomics.pylab_aux**).
+
+All dependencies are optional.
+
+Installing a subset of dependencies with pip
+............................................
+
+You can quickly install just the dependencies you need by specifying an
+`"extra" <https://setuptools.pypa.io/en/latest/userguide/dependency_management.html#optional-dependencies>`_. For example::
+
+    pip install pyteomics[XML]
+
+This will install Pyteomics, NumPy and lxml, which are needed to read XML format. Currently provided identifiers are:
+`XML`, `TDA`, `graphics`, `DF`, `Unimod`, `numpress`, `mzMLb`, `proforma`.
+
+You can also use these specs as dependencies in your own packages which require specific Pyteomics functionality.
