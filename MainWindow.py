@@ -242,7 +242,7 @@ info_frame.pack(fill='x', padx=20, pady=10)
 mass_label = tk.Label(info_frame, text="Mass:", font=("Arial", 14), anchor="w")
 mass_label.pack(side='top', pady=5, fill="x")
 # Net Charge information
-charge_label = tk.Label(info_frame, text="Net Charge:", font=("Arial", 14), anchor="w")
+charge_label = tk.Label(info_frame, text="Net Charge for MS:", font=("Arial", 14), anchor="w")
 charge_label.pack(side='top', pady=5, fill="x")
 
 
@@ -262,14 +262,20 @@ mass_spec_image_label.photo = mass_spec_placeholder_image  # Keep a reference
 mass_spec_image_label.pack(padx=10, pady=10)
 
 
-### Tab 3 for _________________
+### Tab 3 for Reagents
 tab3 = ttk.Frame(notebook)
 notebook.add(tab3, text='Conjugation')
 
-
-### Tab 4 for _________________
+### Tab 4 for Secondary Structure
 tab4 = ttk.Frame(notebook)
 notebook.add(tab4, text='Structure')
+
+### Tab 5 for Credits
+tab5 = ttk.Frame(notebook)
+notebook.add(tab5, text='Credits')
+# Create a Label to display the text
+credits_label = tk.Label(tab5, text="Me lol") # Change this later
+credits_label.pack(pady=10)  # This will center the label in tab5
 
 
 # Start the application
