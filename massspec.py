@@ -13,7 +13,7 @@ def mass_spec():
 
     while charge>0:
 
-        peaks[charge-1] = mass/charge
+        peaks[charge-1] = (mass + charge)/charge
 
         charge = charge - 1
 
@@ -27,7 +27,7 @@ for i in range(len(peaks)):
 
     plt.axvline(peaks[i], ymin = 0, ymax = 0.8)
     
-    plt.text(peaks[i], 0.81, [round(peaks[i], 1),f'M$^{i+1}$$^+$'], fontsize = 10, ha='center', va='center', rotation = 30)
+    plt.text(peaks[i], 0.81, [round(peaks[i], 1),f'M$^{i+1}$$^+$'], fontsize = 11, ha='center', va='center', rotation = 30)
 
     
 
