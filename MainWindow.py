@@ -1,4 +1,3 @@
-import subprocess
 import tkinter as tk
 from tkinter import PhotoImage, ttk, Toplevel
 import pandas as pd
@@ -25,13 +24,6 @@ def on_button_click(event=None):
     mass_spec_photo = PhotoImage(file=image_path)
     mass_spec_image_label.config(image=mass_spec_photo)
     mass_spec_image_label.image = mass_spec_photo  # Keep a reference
-
-def open_on_screen_keyboard(event):
-    # Attempt to open the touch keyboard
-    try:
-        subprocess.Popen(["C:\\Program Files\\Common Files\\microsoft shared\\ink\\TabTip.exe"], shell=True)
-    except Exception as e:
-        print(f"Error opening on-screen keyboard: {e}")
 
 
 def open_tutorial():
@@ -188,7 +180,6 @@ combo_box_left.pack(side='left', padx=(0, 5))  # Pack to the left side with some
 # Input text box
 entry = tk.Entry(combo_entry_frame, width=50, background="light gray", font=('Arial 12'))
 entry.pack(side='left', padx=5)
-entry.bind("<FocusIn>", open_on_screen_keyboard) # opens the on-screen keyboard when the entry box is clicked
 # Right Combo Box
 combo_options_right = ['A', 'B', 'C']
 combo_box_right = ttk.Combobox(combo_entry_frame, values=combo_options_right, state="readonly", width=15)
