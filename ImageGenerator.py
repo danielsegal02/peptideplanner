@@ -1,8 +1,7 @@
 import pandas as pd
 import matplotlib.pyplot as plt
 from rdkit import Chem
-from rdkit.Chem import Draw
-from rdkit.Chem import rdChemReactions
+from rdkit.Chem import Draw, rdChemReactions, rdDepictor
 
 def get_smiles_from_code(code_string):
     # Load the CSV file
@@ -60,6 +59,8 @@ def generate_peptide_image(pep_str):
     pep_smiles_lst = get_smiles_from_code(pep_str)
     final_smiles = combine_smiles(pep_smiles_lst)
     mol = Chem.MolFromSmiles(final_smiles)
+    rdDepictor.SetPreferCoordGen(True)
+    rdDepictor.Compute2DCoords(mol)
     image_path = 'Images/peptide_image.png'
     Draw.MolToFile(mol, image_path, size=(600, 230))  #customize size to window size if possible
     return image_path
@@ -69,13 +70,14 @@ def generate_mass_spec(mass, charge):
     peaks = [0 for i in range(charge)]
 
     while charge > 0:
-        peaks[charge - 1] = mass / charge
+        peaks[charge - 1] = (mass + charge) / charge
         charge -= 1
 
     for i in range(len(peaks)):
         plt.axvline(peaks[i], ymin=0, ymax=0.8)
-        plt.text(peaks[i], 0.81, round(peaks[i], 1), ha='center', va='center')
+        plt.text(peaks[i], 0.81,  [round(peaks[i], 1),f'M$^{i+1}$$^+$'], fontsize = 11, ha='center', va='center', rotation = 30)
 
+    plt.xlim(0, max(peaks)+100)
     plt.xlabel("m/z")
     plt.ylabel("Intensity")
 

@@ -30,11 +30,46 @@ def open_tutorial():
     if not hasattr(open_tutorial, "is_open") or not open_tutorial.is_open:
         tutorial = Toplevel(app)
         tutorial.title("Tutorial")
-        tutorial.minsize(300, 600)
-        # This line re-enables the button when the window is closed.
+        tutorial.geometry("600x600")
         tutorial.protocol("WM_DELETE_WINDOW", lambda: on_close_tutorial(tutorial))
         open_tutorial.is_open = True
         tutorial_button["state"] = "disabled"
+
+        # Tutorial Title
+        tutorial_title = tk.Label(tutorial, text="Tutorial", font=("Arial", 18, "bold"))
+        tutorial_title.pack(pady=(10, 5))
+
+        # Tutorial Content
+        tutorial_text = """
+1. In the gray text box toward the top of the screen, enter the desired amino acid sequence. Be sure to type each amino acid using its corresponding letter/symbol as listed in the Legend. (For reference, you can click “Open Legend”)
+
+2. Click “Generate Peptide” to populate the functions under all tabs. The chemical structure, mass, and net charge of the peptide should appear on the first page of the application.
+
+3. To view the predicted mass spectrometry graph, click the “Mass Spectrometry” tab.
+
+4. To do reagent calculations, click the “Conjugation” tab.
+
+5. To view the predicted secondary structure, click the “Structure” tab.
+
+6. To enter a new amino acid sequence, clear the gray text box at the top and type in the new sequence. Click “Generate Peptide”.
+        """
+
+        # Create a Text widget for the tutorial content
+        tutorial_content = tk.Text(tutorial, wrap="word", font=("Arial", 12), bg="light grey", borderwidth=2, relief="solid")
+        tutorial_content.insert("1.0", tutorial_text)
+
+        # Define a tag for bold and slightly larger font for the numbers
+        tutorial_content.tag_configure("list_number", font=("Arial", 14, "bold"))
+
+        # Find all occurrences of a pattern (in this case, the numbers followed by a period)
+        import re
+        for match in re.finditer(r"\d+\.", tutorial_text):
+            start = "1.0 + {} chars".format(match.start())
+            end = "1.0 + {} chars".format(match.end())
+            tutorial_content.tag_add("list_number", start, end)
+
+        tutorial_content.config(state="disabled")  # Make the text widget read-only
+        tutorial_content.pack(padx=10, pady=10, fill="both", expand=True)
 
 def open_legend():
     if not hasattr(open_legend, "is_open") or not open_legend.is_open:
@@ -52,17 +87,39 @@ def open_legend():
         tree.column("Code", minwidth=50, width=100, anchor='center')
         tree.column("Name", minwidth=100, width=150, anchor='center')
         
-        # Read the CSV file using pandas and populate the treeview
+        # Read the CSV file using pandas and populate the treeview with the amino acids columns
         df = pd.read_csv("AminoAcidTable.csv")
         for index, row in df.iterrows():
             tree.insert("", tk.END, values=(row["Code"], row["Name"]))
                 
         tree.pack(expand=True, fill='both')
+
+        # Define the Add Amino Acid button with a command that includes itself
+        add_AA_button = ttk.Button(legend, text="Add a new Amino Acid", command=lambda: open_add_AA_window(add_AA_button, legend))
+        add_AA_button.pack(pady=10)
         
         legend.protocol("WM_DELETE_WINDOW", lambda: on_close_legend(legend))
         open_legend.is_open = True
+        open_legend.add_AA_window = None  # Initially, there's no add_AA_window
         legend_button["state"] = "disabled"
 
+def open_add_AA_window(button, legend):
+    # Check if the add_AA_window is already open using a global variable or an attribute of the legend window
+    if not hasattr(legend, "add_AA_window_open") or not legend.add_AA_window_open:
+        add_AA_window = Toplevel(app)
+        add_AA_window.title("Add Amino Acids")
+        add_AA_window.geometry("300x200")
+        
+        label = tk.Label(add_AA_window, text="Add your amino acid details here.")
+        label.pack(pady=10)
+
+        button["state"] = "disabled"
+        legend.add_AA_window_open = True  # Mark the add_AA_window as open
+
+        # Instead of using open_add_AA_window.is_open, store the add_AA_window reference in the legend window for access during closure
+        legend.add_AA_window_ref = add_AA_window
+
+        add_AA_window.protocol("WM_DELETE_WINDOW", lambda: on_close_add_AA(add_AA_window, button, legend))
 
 def on_close_tutorial(window):
     open_tutorial.is_open = False
@@ -70,8 +127,21 @@ def on_close_tutorial(window):
     window.destroy()
 
 def on_close_legend(window):
+    # Check if the add_AA_window is open and close it if necessary
+    if hasattr(window, "add_AA_window_open") and window.add_AA_window_open:
+        if hasattr(window, "add_AA_window_ref"):
+            window.add_AA_window_ref.destroy()  # Close the add_AA_window if it's open
+            window.add_AA_window_ref = None
+    window.add_AA_window_open = False  # Reset the state
+    # Reset the legend is_open state and enable the legend button
     open_legend.is_open = False
     legend_button["state"] = "normal"
+    window.destroy()
+
+def on_close_add_AA(window, button, legend):
+    # Mark the add_AA_window as closed and enable the button for reopening it
+    legend.add_AA_window_open = False
+    button["state"] = "normal"
     window.destroy()
 
 
@@ -98,9 +168,23 @@ tutorial_button.pack(side="left", fill="x", expand=True)
 legend_button = ttk.Button(button_frame, text="Open Legend", command=open_legend)
 legend_button.pack(side="right", fill="x", expand=True)
 
+
+## Entry box and Termini select boxes
+# Frame that entry and combo boxes will be packed in
+combo_entry_frame = tk.Frame(app)
+combo_entry_frame.pack(padx=10, pady=10)
+# Left Combo Box
+combo_options_left = ['Option 1', 'Option 2', 'Option 3']
+combo_box_left = ttk.Combobox(combo_entry_frame, values=combo_options_left, state="readonly", width=15)
+combo_box_left.pack(side='left', padx=(0, 5))  # Pack to the left side with some padding
 # Input text box
-entry = tk.Entry(app, width=50, background="light gray", font=('Arial 12'))
-entry.pack(padx=10, pady=10)
+entry = tk.Entry(combo_entry_frame, width=50, background="light gray", font=('Arial 12'))
+entry.pack(side='left', padx=5)
+# Right Combo Box
+combo_options_right = ['A', 'B', 'C']
+combo_box_right = ttk.Combobox(combo_entry_frame, values=combo_options_right, state="readonly", width=15)
+combo_box_right.pack(side='left', padx=(5, 0))  # Pack to the left side, which effectively places it to the right of the entry
+
 
 ## Generate Peptide Button
 # Configure a more modern-looking button style
@@ -158,7 +242,7 @@ info_frame.pack(fill='x', padx=20, pady=10)
 mass_label = tk.Label(info_frame, text="Mass:", font=("Arial", 14), anchor="w")
 mass_label.pack(side='top', pady=5, fill="x")
 # Net Charge information
-charge_label = tk.Label(info_frame, text="Net Charge:", font=("Arial", 14), anchor="w")
+charge_label = tk.Label(info_frame, text="Net Charge for MS:", font=("Arial", 14), anchor="w")
 charge_label.pack(side='top', pady=5, fill="x")
 
 
@@ -178,14 +262,20 @@ mass_spec_image_label.photo = mass_spec_placeholder_image  # Keep a reference
 mass_spec_image_label.pack(padx=10, pady=10)
 
 
-### Tab 3 for _________________
+### Tab 3 for Reagents
 tab3 = ttk.Frame(notebook)
 notebook.add(tab3, text='Conjugation')
 
-
-### Tab 4 for _________________
+### Tab 4 for Secondary Structure
 tab4 = ttk.Frame(notebook)
 notebook.add(tab4, text='Structure')
+
+### Tab 5 for Credits
+tab5 = ttk.Frame(notebook)
+notebook.add(tab5, text='Credits')
+# Create a Label to display the text
+credits_label = tk.Label(tab5, text="Me lol") # Change this later
+credits_label.pack(pady=10)  # This will center the label in tab5
 
 
 # Start the application
