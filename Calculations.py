@@ -16,7 +16,7 @@ def calculate_mass(peptide_string, n_terminus, c_terminus):
 
     if n_terminus == "Acetyl":
         total_mass += 42.04
-    if c_terminus == "Amine":
+    if c_terminus == "Amide":
         total_mass -= 0.986
 
     return total_mass

@@ -178,13 +178,13 @@ combo_entry_frame.pack(padx=10, pady=10)
 # Left Combo Box
 combo_options_left = ['Amine', 'Acetyl']
 combo_box_left = ttk.Combobox(combo_entry_frame, values=combo_options_left, state="readonly", width=15)
-combo_box_left.current(1)
+combo_box_left.current(0)
 combo_box_left.pack(side='left', padx=(0, 5))  # Pack to the left side with some padding
 # Input text box
 entry = tk.Entry(combo_entry_frame, width=50, background="light gray", font=('Arial 12'))
 entry.pack(side='left', padx=5)
 # Right Combo Box
-combo_options_right = ['Amine', 'Acetyl']
+combo_options_right = ['Amide', 'Acid']
 combo_box_right = ttk.Combobox(combo_entry_frame, values=combo_options_right, state="readonly", width=15)
 combo_box_right.current(0)
 combo_box_right.pack(side='left', padx=(5, 0))  # Pack to the left side, which effectively places it to the right of the entry
