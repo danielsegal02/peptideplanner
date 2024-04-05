@@ -3,6 +3,8 @@ import matplotlib.pyplot as plt
 from rdkit import Chem
 from rdkit.Chem import Draw, rdChemReactions, rdDepictor
 
+## Functions to retrieve the user input and put it into the correct format
+
 def get_smiles_from_code(code_string):
     # Load the CSV file
     df = pd.read_csv("AminoAcidTable.csv")
@@ -15,6 +17,16 @@ def get_smiles_from_code(code_string):
     
     return smiles_list
 
+def modify_termini(smiles_list, n_terminus, c_terminus):
+    # Apply N-terminus modification if specified
+    if n_terminus == "Acetyl":
+        smiles_list[0] = "CC(=O)" + smiles_list[0][1:]
+    
+    # Apply C-terminus modification if specified
+    if c_terminus == "Amine":
+        smiles_list[-1] = smiles_list[-1][:-1] + "N"
+    
+    return smiles_list
 
 def combine_smiles(amino_acids_smiles):
     """
@@ -55,9 +67,12 @@ def combine_smiles(amino_acids_smiles):
     return final_peptide_smiles
 
 
-def generate_peptide_image(pep_str):
+# Functions to generate the actual images for the GUI
+
+def generate_peptide_image(pep_str, n_terminus, c_terminus):
     pep_smiles_lst = get_smiles_from_code(pep_str)
-    final_smiles = combine_smiles(pep_smiles_lst)
+    modified_smiles_lst = modify_termini(pep_smiles_lst, n_terminus, c_terminus)
+    final_smiles = combine_smiles(modified_smiles_lst)
     mol = Chem.MolFromSmiles(final_smiles)
     rdDepictor.SetPreferCoordGen(True)
     rdDepictor.Compute2DCoords(mol)

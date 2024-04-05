@@ -7,8 +7,10 @@ from Calculations import calculate_mass, calculate_charge
 # Function to be called when the button is clicked
 def on_button_click(event=None):
     amino_acid_string = entry.get()
+    n_terminus = combo_box_left.get()
+    c_terminus = combo_box_right.get()
     # Generates and displays the image in the first tab
-    chem_struct_image_path = generate_peptide_image(amino_acid_string)
+    chem_struct_image_path = generate_peptide_image(amino_acid_string, n_terminus, c_terminus)
     chem_struct_photo = PhotoImage(file=chem_struct_image_path)
     chem_struct_image_label.config(image=chem_struct_photo)
     chem_struct_image_label.image = chem_struct_photo  # Keep a reference
@@ -17,7 +19,7 @@ def on_button_click(event=None):
     mass = calculate_mass(amino_acid_string)
     mass_label.config(text=f"Mass: {mass}")  # Update mass label
     charge = calculate_charge(amino_acid_string)
-    charge_label.config(text=f"Net Charge: {charge}")  # Update charge label
+    charge_label.config(text=f"Net Charge for MS: {charge}")  # Update charge label
 
     # Calculates and displays the mass spec in the second tab
     image_path = generate_mass_spec(mass, charge)
@@ -174,15 +176,17 @@ legend_button.pack(side="right", fill="x", expand=True)
 combo_entry_frame = tk.Frame(app)
 combo_entry_frame.pack(padx=10, pady=10)
 # Left Combo Box
-combo_options_left = ['Option 1', 'Option 2', 'Option 3']
+combo_options_left = ['Amine', 'Acetyl']
 combo_box_left = ttk.Combobox(combo_entry_frame, values=combo_options_left, state="readonly", width=15)
+combo_box_left.current(1)
 combo_box_left.pack(side='left', padx=(0, 5))  # Pack to the left side with some padding
 # Input text box
 entry = tk.Entry(combo_entry_frame, width=50, background="light gray", font=('Arial 12'))
 entry.pack(side='left', padx=5)
 # Right Combo Box
-combo_options_right = ['A', 'B', 'C']
+combo_options_right = ['Amine', 'Acetyl']
 combo_box_right = ttk.Combobox(combo_entry_frame, values=combo_options_right, state="readonly", width=15)
+combo_box_right.current(0)
 combo_box_right.pack(side='left', padx=(5, 0))  # Pack to the left side, which effectively places it to the right of the entry
 
 
