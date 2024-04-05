@@ -16,9 +16,9 @@ def on_button_click(event=None):
     chem_struct_image_label.image = chem_struct_photo  # Keep a reference
     
     # Calculates and displays the mass and net charge in the first tab
-    mass = calculate_mass(amino_acid_string)
+    mass = calculate_mass(amino_acid_string, n_terminus, c_terminus)
     mass_label.config(text=f"Mass: {mass}")  # Update mass label
-    charge = calculate_charge(amino_acid_string)
+    charge = calculate_charge(amino_acid_string, n_terminus, c_terminus)
     charge_label.config(text=f"Net Charge for MS: {charge}")  # Update charge label
 
     # Calculates and displays the mass spec in the second tab
