@@ -163,6 +163,7 @@ top_label.pack(pady=10)
 # Create a frame to hold the buttons
 button_frame = tk.Frame(app)
 button_frame.pack(pady=(0, 10))  # Add some padding below the frame for spacing
+style.configure("TButton", font=('Helvetica', 12), width=20) # Creates a style element for the top two buttons
 # Tutorial button created and packed
 tutorial_button = ttk.Button(button_frame, text="Open Tutorial", command=open_tutorial)
 tutorial_button.pack(side="left", fill="x", expand=True)
