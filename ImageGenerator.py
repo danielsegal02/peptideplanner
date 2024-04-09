@@ -3,6 +3,8 @@ import matplotlib.pyplot as plt
 from rdkit import Chem
 from rdkit.Chem import Draw, rdChemReactions, rdDepictor
 
+## Functions to retrieve the user input and put it into the correct format
+
 def get_smiles_from_code(code_string):
     # Load the CSV file
     df = pd.read_csv("AminoAcidTable.csv")
@@ -14,6 +16,78 @@ def get_smiles_from_code(code_string):
     smiles_list = [code_to_smiles[code] for code in code_string if code in code_to_smiles]
     
     return smiles_list
+
+def modify_n_terminus(pep_smiles_lst):
+    """
+    Modifies the N-terminus of the first amino acid in a list of amino acid SMILES strings by reacting it with an acetyl group.
+    
+    Args:
+        pep_smiles_lst (list of str): List of SMILES strings for the amino acids.
+        
+    Returns:
+        list of str: The original list with the N-terminus of the first amino acid modified.
+    """
+    # Check if the list is empty
+    if not pep_smiles_lst:
+        return pep_smiles_lst
+
+    # Acetyl group SMILES for N-terminus modification
+    amine_smiles = 'CC(=O)O'
+    amine_mol = Chem.MolFromSmiles(amine_smiles)
+
+    # Take the first amino acid SMILES from the list
+    last_aa_smiles = pep_smiles_lst[0]
+    last_aa_mol = Chem.MolFromSmiles(last_aa_smiles)
+
+    # Define a reaction for adding the acetyl group to the N-terminus
+    # The reaction targets an amine group and attaches the acetyl group
+    amidation_rxn = rdChemReactions.ReactionFromSmarts('[C:1](=[O:2])O.[N:3]>>[C:1](=[O:2])[N:3]')
+    product_set = amidation_rxn.RunReactants((amine_mol, last_aa_mol))
+
+    if product_set:
+        # Update the first amino acid with the acetylated product
+        modified_last_aa_mol = product_set[0][0]
+        modified_last_aa_smiles = Chem.MolToSmiles(modified_last_aa_mol)
+        # Replace the first amino acid SMILES in the list with the modified one
+        pep_smiles_lst[0] = modified_last_aa_smiles
+
+    return pep_smiles_lst
+
+def modify_c_terminus(pep_smiles_lst):
+    """
+    Modifies the C-terminus of the last amino acid in a list of amino acid SMILES strings by reacting it with an amine group.
+    
+    Args:
+        pep_smiles_lst (list of str): List of SMILES strings for the amino acids.
+        
+    Returns:
+        list of str: The original list with the C-terminus of the last amino acid modified.
+    """
+    # Check if the list is empty
+    if not pep_smiles_lst:
+        return pep_smiles_lst
+
+    # Amine group SMILES for C-terminus modification
+    amine_smiles = 'N'
+    amine_mol = Chem.MolFromSmiles(amine_smiles)
+
+    # Take the last amino acid SMILES from the list
+    last_aa_smiles = pep_smiles_lst[-1]
+    last_aa_mol = Chem.MolFromSmiles(last_aa_smiles)
+
+    # Define a reaction for adding the amine group to the C-terminus
+    # The reaction targets a carboxyl group and attaches the amine group, forming an amide bond
+    amidation_rxn = rdChemReactions.ReactionFromSmarts('[C:1](=[O:2])O.[N:3]>>[C:1](=[O:2])[N:3]')
+    product_set = amidation_rxn.RunReactants((last_aa_mol, amine_mol))
+
+    if product_set:
+        # Update the last amino acid with the amidated product
+        modified_last_aa_mol = product_set[0][0]
+        modified_last_aa_smiles = Chem.MolToSmiles(modified_last_aa_mol)
+        # Replace the last amino acid SMILES in the list with the modified one
+        pep_smiles_lst[-1] = modified_last_aa_smiles
+
+    return pep_smiles_lst
 
 
 def combine_smiles(amino_acids_smiles):
@@ -55,8 +129,14 @@ def combine_smiles(amino_acids_smiles):
     return final_peptide_smiles
 
 
-def generate_peptide_image(pep_str):
+## Functions to generate the actual images for the GUI
+
+def generate_peptide_image(pep_str, n_terminus, c_terminus):
     pep_smiles_lst = get_smiles_from_code(pep_str)
+    if n_terminus == "Acetyl":
+        pep_smiles_lst = modify_n_terminus(pep_smiles_lst)
+    if c_terminus == "Amide":
+        pep_smiles_lst = modify_n_terminus(pep_smiles_lst)
     final_smiles = combine_smiles(pep_smiles_lst)
     mol = Chem.MolFromSmiles(final_smiles)
     rdDepictor.SetPreferCoordGen(True)

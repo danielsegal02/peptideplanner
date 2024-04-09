@@ -7,17 +7,19 @@ from Calculations import calculate_mass, calculate_charge
 # Function to be called when the button is clicked
 def on_button_click(event=None):
     amino_acid_string = entry.get()
+    n_terminus = combo_box_left.get()
+    c_terminus = combo_box_right.get()
     # Generates and displays the image in the first tab
-    chem_struct_image_path = generate_peptide_image(amino_acid_string)
+    chem_struct_image_path = generate_peptide_image(amino_acid_string, n_terminus, c_terminus)
     chem_struct_photo = PhotoImage(file=chem_struct_image_path)
     chem_struct_image_label.config(image=chem_struct_photo)
     chem_struct_image_label.image = chem_struct_photo  # Keep a reference
     
     # Calculates and displays the mass and net charge in the first tab
-    mass = calculate_mass(amino_acid_string)
+    mass = calculate_mass(amino_acid_string, n_terminus, c_terminus)
     mass_label.config(text=f"Mass: {mass}")  # Update mass label
-    charge = calculate_charge(amino_acid_string)
-    charge_label.config(text=f"Net Charge: {charge}")  # Update charge label
+    charge = calculate_charge(amino_acid_string, n_terminus, c_terminus)
+    charge_label.config(text=f"Net Charge for MS: {charge}")  # Update charge label
 
     # Calculates and displays the mass spec in the second tab
     image_path = generate_mass_spec(mass, charge)
@@ -161,6 +163,7 @@ top_label.pack(pady=10)
 # Create a frame to hold the buttons
 button_frame = tk.Frame(app)
 button_frame.pack(pady=(0, 10))  # Add some padding below the frame for spacing
+style.configure("TButton", font=('Helvetica', 12), width=20) # Creates a style element for the top two buttons
 # Tutorial button created and packed
 tutorial_button = ttk.Button(button_frame, text="Open Tutorial", command=open_tutorial)
 tutorial_button.pack(side="left", fill="x", expand=True)
@@ -174,15 +177,17 @@ legend_button.pack(side="right", fill="x", expand=True)
 combo_entry_frame = tk.Frame(app)
 combo_entry_frame.pack(padx=10, pady=10)
 # Left Combo Box
-combo_options_left = ['Option 1', 'Option 2', 'Option 3']
+combo_options_left = ['Amine', 'Acetyl']
 combo_box_left = ttk.Combobox(combo_entry_frame, values=combo_options_left, state="readonly", width=15)
+combo_box_left.current(0)
 combo_box_left.pack(side='left', padx=(0, 5))  # Pack to the left side with some padding
 # Input text box
 entry = tk.Entry(combo_entry_frame, width=50, background="light gray", font=('Arial 12'))
 entry.pack(side='left', padx=5)
 # Right Combo Box
-combo_options_right = ['A', 'B', 'C']
+combo_options_right = ['Amide', 'Acid']
 combo_box_right = ttk.Combobox(combo_entry_frame, values=combo_options_right, state="readonly", width=15)
+combo_box_right.current(0)
 combo_box_right.pack(side='left', padx=(5, 0))  # Pack to the left side, which effectively places it to the right of the entry
 
 
@@ -265,6 +270,62 @@ mass_spec_image_label.pack(padx=10, pady=10)
 ### Tab 3 for Reagents
 tab3 = ttk.Frame(notebook)
 notebook.add(tab3, text='Conjugation')
+# Adjust style elements for a nicer look
+style = ttk.Style()
+style.configure("TLabel", font=('Helvetica', 12), anchor="center")
+style.configure("TEntry", font=('Helvetica', 12))
+style.configure("TRadiobutton", font=('Helvetica', 12))
+
+# Frame for central column in tab3 with style adjustments
+reagents_frame = ttk.Frame(tab3)
+reagents_frame.pack(padx=10, pady=10, expand=True)
+reagents_frame.grid_columnconfigure(0, weight=1) # Configure the frame to use all available space and center contents
+
+# Top answer labels
+ttk.Label(reagents_frame, text="Reagent Mass ____________ mg", style="TLabel").grid(column=1, row=0, sticky="EW")
+ttk.Label(reagents_frame, text="Reagent Volume ____________ μL", style="TLabel").grid(column=1, row=1, sticky="EW")
+ttk.Label(reagents_frame, text="Solvent Volume ____________ mL", style="TLabel").grid(column=1, row=2, sticky="EW")
+
+# Creates a subframe for the radio buttons
+radio_frame = ttk.Frame(reagents_frame)
+radio_frame.grid(column=1, row=3, sticky="EW", pady=(10, 0))  # Adds 10px padding above the radio frame
+radio_frame.grid_columnconfigure(0, weight=1)
+radio_frame.grid_columnconfigure(1, weight=1)
+# Radio buttons for Dry or Wet
+dry_wet_var = tk.StringVar()
+ttk.Radiobutton(radio_frame, text="Dry", variable=dry_wet_var, value="Dry", style="TRadiobutton").grid(column=0, row=0)
+ttk.Radiobutton(radio_frame, text="Wet", variable=dry_wet_var, value="Wet", style="TRadiobutton").grid(column=1, row=0)
+
+# User labels and entry input boxes
+ttk.Label(reagents_frame, text="1. Peptide scale", style="TLabel").grid(column=0, row=4, sticky="W", padx=5, pady=(10, 0))
+ttk.Entry(reagents_frame, font=('Helvetica', 12), width=20).grid(column=1, row=4, sticky="EW", padx=(2, 10), pady=2)
+ttk.Label(reagents_frame, text="mmol", style="TLabel").grid(column=2, row=4, sticky="W", padx=5, pady=(10, 0))
+
+ttk.Label(reagents_frame, text="2. % resin used", style="TLabel").grid(column=0, row=5, sticky="W", padx=5, pady=(10, 0))
+ttk.Entry(reagents_frame, font=('Helvetica', 12), width=20).grid(column=1, row=5, sticky="EW", padx=(2, 10), pady=2)
+ttk.Label(reagents_frame, text="(%)", style="TLabel").grid(column=2, row=5, sticky="W", padx=5, pady=(10, 0))
+
+ttk.Label(reagents_frame, text="3. Reagent MW", style="TLabel").grid(column=0, row=6, sticky="W", padx=5, pady=(10, 0))
+ttk.Entry(reagents_frame, font=('Helvetica', 12), width=20).grid(column=1, row=6, sticky="EW", padx=(2, 10), pady=2)
+ttk.Label(reagents_frame, text="(g/mol)", style="TLabel").grid(column=2, row=6, sticky="W", padx=5, pady=(10, 0))
+
+ttk.Label(reagents_frame, text="4. Reagent equiv.", style="TLabel").grid(column=0, row=7, sticky="W", padx=5, pady=(10, 0))
+ttk.Entry(reagents_frame, font=('Helvetica', 12), width=20).grid(column=1, row=7, sticky="EW", padx=(2, 10), pady=2)
+
+ttk.Label(reagents_frame, text="5. Reagent density", style="TLabel").grid(column=0, row=8, sticky="W", padx=5, pady=(10, 0))
+ttk.Entry(reagents_frame, font=('Helvetica', 12), width=20).grid(column=1, row=8, sticky="EW", padx=(2, 10), pady=2)
+ttk.Label(reagents_frame, text="(g/mL)", style="TLabel").grid(column=2, row=8, sticky="W", padx=5, pady=(10, 0))
+
+ttk.Label(reagents_frame, text="6. Solvent Factor", style="TLabel").grid(column=0, row=9, sticky="W", padx=5, pady=(10, 0))
+ttk.Entry(reagents_frame, font=('Helvetica', 12), width=20).grid(column=1, row=9, sticky="EW", padx=(2, 10), pady=2)
+
+# Create a function to handle the button click if needed
+def handle_button_click():
+    print("Button Clicked!")  # Placeholder action
+
+# Adding the button
+ttk.Button(reagents_frame, text="Calculate", command=handle_button_click, style="Modern.TButton").grid(column=1, row=10, sticky="EW", padx=(2, 10), pady=2)
+
 
 ### Tab 4 for Secondary Structure
 tab4 = ttk.Frame(notebook)
