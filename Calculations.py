@@ -1,6 +1,6 @@
 import pandas as pd
 
-def calculate_mass(peptide_string):
+def calculate_mass(peptide_string, n_terminus, c_terminus):
     # In case the input box is empty
     if peptide_string == "":
         return 0
@@ -13,10 +13,15 @@ def calculate_mass(peptide_string):
     
     # Sum the Residue Mass for each code in the string (and account for the extra missing water mass)
     total_mass = sum([code_to_mass[code] for code in peptide_string if code in code_to_mass]) + 18.01528
-    
+
+    if n_terminus == "Acetyl":
+        total_mass += 42.04
+    if c_terminus == "Amide":
+        total_mass -= 0.986
+
     return total_mass
 
-def calculate_charge(peptide_string):
+def calculate_charge(peptide_string, n_terminus, c_terminus):
     # Load the CSV file
     df = pd.read_csv("AminoAcidTable.csv")
     
@@ -25,6 +30,9 @@ def calculate_charge(peptide_string):
     
     # Sum the Charge for each code in the string
     total_charge = sum([code_to_charge[code] for code in peptide_string if code in code_to_charge]) + 1
+    
+    if n_terminus == "Amine":
+        total_charge += 1
     
     return total_charge
 
