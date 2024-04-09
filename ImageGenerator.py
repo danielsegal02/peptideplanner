@@ -136,7 +136,7 @@ def generate_peptide_image(pep_str, n_terminus, c_terminus):
     if n_terminus == "Acetyl":
         pep_smiles_lst = modify_n_terminus(pep_smiles_lst)
     if c_terminus == "Amide":
-        pep_smiles_lst = modify_n_terminus(pep_smiles_lst)
+        pep_smiles_lst = modify_c_terminus(pep_smiles_lst)
     final_smiles = combine_smiles(pep_smiles_lst)
     mol = Chem.MolFromSmiles(final_smiles)
     rdDepictor.SetPreferCoordGen(True)
