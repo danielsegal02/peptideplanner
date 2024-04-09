@@ -2,7 +2,7 @@ import tkinter as tk
 from tkinter import PhotoImage, ttk, Toplevel
 import pandas as pd
 from ImageGenerator import generate_peptide_image, generate_mass_spec
-from Calculations import calculate_mass, calculate_charge
+from Calculations import calculate_mass, calculate_charge, calculate_reagent_mass, calculate_reagent_vol, calculate_solvent_vol
 
 # Function to be called when the button is clicked
 def on_button_click(event=None):
@@ -312,31 +312,56 @@ ttk.Radiobutton(radio_frame, text="Dry", variable=dry_wet_var, value="Dry", styl
 ttk.Radiobutton(radio_frame, text="Wet", variable=dry_wet_var, value="Wet", style="TRadiobutton").grid(column=1, row=0)
 
 # User labels and entry input boxes
+e1 = tk.DoubleVar()
 ttk.Label(reagents_frame, text="1. Peptide scale", style="TLabel").grid(column=0, row=4, sticky="W", padx=5, pady=(10, 0))
-ttk.Entry(reagents_frame, font=('Helvetica', 12), width=20).grid(column=1, row=4, sticky="EW", padx=(2, 10), pady=2)
+ttk.Entry(reagents_frame, font=('Helvetica', 12), textvariable=e1, width=20).grid(column=1, row=4, sticky="EW", padx=(2, 10), pady=2)
 ttk.Label(reagents_frame, text="mmol", style="TLabel").grid(column=2, row=4, sticky="W", padx=5, pady=(10, 0))
 
+e2 = tk.DoubleVar()
 ttk.Label(reagents_frame, text="2. % resin used", style="TLabel").grid(column=0, row=5, sticky="W", padx=5, pady=(10, 0))
-ttk.Entry(reagents_frame, font=('Helvetica', 12), width=20).grid(column=1, row=5, sticky="EW", padx=(2, 10), pady=2)
+ttk.Entry(reagents_frame, font=('Helvetica', 12), textvariable=e2, width=20).grid(column=1, row=5, sticky="EW", padx=(2, 10), pady=2)
 ttk.Label(reagents_frame, text="(%)", style="TLabel").grid(column=2, row=5, sticky="W", padx=5, pady=(10, 0))
 
+e3 = tk.DoubleVar()
 ttk.Label(reagents_frame, text="3. Reagent MW", style="TLabel").grid(column=0, row=6, sticky="W", padx=5, pady=(10, 0))
-ttk.Entry(reagents_frame, font=('Helvetica', 12), width=20).grid(column=1, row=6, sticky="EW", padx=(2, 10), pady=2)
+ttk.Entry(reagents_frame, font=('Helvetica', 12), textvariable=e3, width=20).grid(column=1, row=6, sticky="EW", padx=(2, 10), pady=2)
 ttk.Label(reagents_frame, text="(g/mol)", style="TLabel").grid(column=2, row=6, sticky="W", padx=5, pady=(10, 0))
 
+e4 = tk.DoubleVar()
 ttk.Label(reagents_frame, text="4. Reagent equiv.", style="TLabel").grid(column=0, row=7, sticky="W", padx=5, pady=(10, 0))
-ttk.Entry(reagents_frame, font=('Helvetica', 12), width=20).grid(column=1, row=7, sticky="EW", padx=(2, 10), pady=2)
+ttk.Entry(reagents_frame, font=('Helvetica', 12), textvariable=e4, width=20).grid(column=1, row=7, sticky="EW", padx=(2, 10), pady=2)
 
+e5 = tk.DoubleVar()
 ttk.Label(reagents_frame, text="5. Reagent density", style="TLabel").grid(column=0, row=8, sticky="W", padx=5, pady=(10, 0))
-ttk.Entry(reagents_frame, font=('Helvetica', 12), width=20).grid(column=1, row=8, sticky="EW", padx=(2, 10), pady=2)
+ttk.Entry(reagents_frame, font=('Helvetica', 12), textvariable=e5, width=20).grid(column=1, row=8, sticky="EW", padx=(2, 10), pady=2)
 ttk.Label(reagents_frame, text="(g/mL)", style="TLabel").grid(column=2, row=8, sticky="W", padx=5, pady=(10, 0))
 
+e6 = tk.IntVar()
 ttk.Label(reagents_frame, text="6. Solvent Factor", style="TLabel").grid(column=0, row=9, sticky="W", padx=5, pady=(10, 0))
-ttk.Entry(reagents_frame, font=('Helvetica', 12), width=20).grid(column=1, row=9, sticky="EW", padx=(2, 10), pady=2)
+ttk.Entry(reagents_frame, font=('Helvetica', 12), textvariable=e6, width=20).grid(column=1, row=9, sticky="EW", padx=(2, 10), pady=2)
 
 # Create a function to handle the button click if needed
 def handle_button_click():
-    print("Button Clicked!")  # Placeholder action
+    isDry = 1
+    if dry_wet_var.get() == "Wet":
+        isDry = 0
+    psc = e1.get()
+    rsn = e2.get()
+    rmw = e3.get()
+    req = e4.get()
+    rdn = e5.get()
+    sol = e6.get()
+
+    R_vol = calculate_reagent_vol(req, rmw, rdn, psc, rsn, isDry) 
+    S_vol = calculate_solvent_vol(sol, psc, rsn)
+    R_mas = calculate_reagent_mass(req, rmw, psc, rsn)
+    #make sure display updated!
+
+    reagents_frame.grid_columnconfigure(0, weight=1) # reconfigure the frame to use all available space and center contents
+    # Top answer labels reconfigured.
+    ttk.Label(reagents_frame, text=f"Reagent Mass _____{R_mas}_____ mg", style="TLabel").grid(column=1, row=0, sticky="EW")
+    ttk.Label(reagents_frame, text=f"Reagent Volume _____{R_vol}_____ μL", style="TLabel").grid(column=1, row=1, sticky="EW")
+    ttk.Label(reagents_frame, text=f"Solvent Volume _____{S_vol}_____ mL", style="TLabel").grid(column=1, row=2, sticky="EW")
 
 # Adding the button
 ttk.Button(reagents_frame, text="Calculate", command=handle_button_click, style="Modern.TButton").grid(column=1, row=10, sticky="EW", padx=(2, 10), pady=2)
