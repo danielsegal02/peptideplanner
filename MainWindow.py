@@ -376,9 +376,39 @@ notebook.add(tab4, text='Structure')
 ### Tab 5 for Credits
 tab5 = ttk.Frame(notebook)
 notebook.add(tab5, text='Credits')
-# Create a Label to display the text
-credits_label = tk.Label(tab5, text="Me lol") # Change this later
-credits_label.pack(pady=10)  # This will center the label in tab5
+
+# Add a Text widget to tab5 for displaying the credits information
+credits_info = tk.Text(tab5, wrap="word", font=("Cambria", 12), bg="white", borderwidth=2, relief="solid", height=10)
+credits_info_text = """
+This application was a result of a Capstone project for Medina Labs. 
+
+Penn State University Main Campus
+2024 Spring
+
+Group Members:
+Jubrial Saigh
+Arianna Parisi
+Chase Burkhart
+Daniel Segal
+Danny Takacs
+Nick Czwartacki
+
+Github link: https://github.com/danielsegal02/peptideplanner.git
+\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n straight up homie
+"""
+
+# Inserts the text into the widget
+credits_info.insert("1.0", credits_info_text)
+
+# Centers the text
+credits_info.tag_configure("center", justify='center') # Create a tag to center-align text
+credits_info.tag_add("center", "1.0", "end") # Apply the 'center' tag to the entire content of the widget
+
+# Make the text widget read-only to prevent user editing
+credits_info.config(state="disabled")
+
+# Pack the Text widget in tab5
+credits_info.pack(padx=10, pady=10, fill="both", expand=True)  
 
 
 # Start the application
