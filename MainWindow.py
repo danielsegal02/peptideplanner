@@ -6,9 +6,46 @@ from Calculations import calculate_mass, calculate_charge
 
 # Function to be called when the button is clicked
 def on_button_click(event=None):
-    amino_acid_string = entry.get()
+    ## Clear any previous outputs first
+    # Reset images to placeholder or clear them
+    chem_struct_image_label.config(image=chem_struct_placeholder_image)
+    mass_spec_image_label.config(image=mass_spec_placeholder_image)
+    # Reset text labels for mass and charge to default or empty values
+    mass_label.config(text="Mass:")
+    charge_label.config(text="Net Charge for MS:")
+
+    # Pulls user inputs
+    amino_acid_string = main_entry_box.get()
     n_terminus = combo_box_left.get()
     c_terminus = combo_box_right.get()
+
+    ## Error catching
+    # Removes trailing spaces from input
+    amino_acid_string = amino_acid_string.rstrip(" ")
+    # Clear the entry box
+    main_entry_box.delete(0, tk.END)
+    # Insert the input without the trailing spaces into the entry box
+    main_entry_box.insert(0, amino_acid_string)
+
+    # Checks if the input is empty
+    if amino_acid_string == "":
+        error_msg.config(text="Error: Bad Input! Please check legend, exclude spaces, and ensure input is valid.")
+        return
+
+    # Checks if there are any characters in the input that are not in the csv
+    amino_acid_df = pd.read_csv("AminoAcidTable.csv")   # Load amino acid data from a CSV file into a DataFrame
+    amino_acid_codes = amino_acid_df["Code"].tolist()       # Convert the 'Code' column of the DataFrame to a list for easy lookup
+    # Iterate over each character in the given amino acid string
+    for amino_acid in amino_acid_string:
+        # Check if the current amino acid code is not in the list of valid codes
+        if amino_acid not in amino_acid_codes:
+            # If an invalid code is found, display an error message and exit the function
+            error_msg.config(text="Error: Bad Input! Please check legend, exclude spaces, and ensure input is valid.")
+            return
+
+    # If no errors are found, clear the error message
+    error_msg.config(text="")
+
     # Generates and displays the image in the first tab
     chem_struct_image_path = generate_peptide_image(amino_acid_string, n_terminus, c_terminus)
     chem_struct_photo = PhotoImage(file=chem_struct_image_path)
@@ -182,13 +219,18 @@ combo_box_left = ttk.Combobox(combo_entry_frame, values=combo_options_left, stat
 combo_box_left.current(0)
 combo_box_left.pack(side='left', padx=(0, 5))  # Pack to the left side with some padding
 # Input text box
-entry = tk.Entry(combo_entry_frame, width=50, background="light gray", font=('Arial 12'))
-entry.pack(side='left', padx=5)
+main_entry_box = tk.Entry(combo_entry_frame, width=50, background="light gray", font=('Arial 12'))
+main_entry_box.pack(side='left', padx=5)
 # Right Combo Box
 combo_options_right = ['Amide', 'Acid']
 combo_box_right = ttk.Combobox(combo_entry_frame, values=combo_options_right, state="readonly", width=15)
 combo_box_right.current(0)
 combo_box_right.pack(side='left', padx=(5, 0))  # Pack to the left side, which effectively places it to the right of the entry
+
+
+# Error Message Label
+error_msg = tk.Label(app, background="white", foreground= 'red', text=" ", font=("Roboto", 10))
+error_msg.pack(pady=5)
 
 
 ## Generate Peptide Button
