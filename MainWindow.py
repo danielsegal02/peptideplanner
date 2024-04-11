@@ -2,7 +2,7 @@ import tkinter as tk
 from tkinter import PhotoImage, ttk, Toplevel
 import pandas as pd
 from ImageGenerator import generate_peptide_image, generate_mass_spec
-from Calculations import calculate_mass, calculate_charge
+from Calculations import calculate_mass, calculate_charge, calculate_reagent_mass, calculate_reagent_volume, calculate_solvent_volume
 
 # Function to be called when the button is clicked
 def on_button_click(event=None):
@@ -219,7 +219,7 @@ combo_box_left = ttk.Combobox(combo_entry_frame, values=combo_options_left, stat
 combo_box_left.current(0)
 combo_box_left.pack(side='left', padx=(0, 5))  # Pack to the left side with some padding
 # Input text box
-main_entry_box = tk.Entry(combo_entry_frame, width=50, background="light gray", font=('Arial 12'))
+main_entry_box = ttk.Entry(combo_entry_frame, width=50, background="light gray", font=('Arial 12'))
 main_entry_box.pack(side='left', padx=5)
 # Right Combo Box
 combo_options_right = ['Amide', 'Acid']
@@ -312,6 +312,7 @@ mass_spec_image_label.pack(padx=10, pady=10)
 ### Tab 3 for Reagents
 tab3 = ttk.Frame(notebook)
 notebook.add(tab3, text='Conjugation')
+
 # Adjust style elements for a nicer look
 style = ttk.Style()
 style.configure("TLabel", font=('Helvetica', 12), anchor="center")
@@ -323,49 +324,76 @@ reagents_frame = ttk.Frame(tab3)
 reagents_frame.pack(padx=10, pady=10, expand=True)
 reagents_frame.grid_columnconfigure(0, weight=1) # Configure the frame to use all available space and center contents
 
-# Top answer labels
+## Top answer labels
 ttk.Label(reagents_frame, text="Reagent Mass ____________ mg", style="TLabel").grid(column=1, row=0, sticky="EW")
 ttk.Label(reagents_frame, text="Reagent Volume ____________ μL", style="TLabel").grid(column=1, row=1, sticky="EW")
 ttk.Label(reagents_frame, text="Solvent Volume ____________ mL", style="TLabel").grid(column=1, row=2, sticky="EW")
 
+## Radio Buttons
 # Creates a subframe for the radio buttons
 radio_frame = ttk.Frame(reagents_frame)
 radio_frame.grid(column=1, row=3, sticky="EW", pady=(10, 0))  # Adds 10px padding above the radio frame
 radio_frame.grid_columnconfigure(0, weight=1)
 radio_frame.grid_columnconfigure(1, weight=1)
-# Radio buttons for Dry or Wet
-dry_wet_var = tk.StringVar()
+
+# Creating the radio buttons for Dry or Wet
+dry_wet_var = tk.StringVar(value="Dry")  # Sets the default to "Dry"
 ttk.Radiobutton(radio_frame, text="Dry", variable=dry_wet_var, value="Dry", style="TRadiobutton").grid(column=0, row=0)
 ttk.Radiobutton(radio_frame, text="Wet", variable=dry_wet_var, value="Wet", style="TRadiobutton").grid(column=1, row=0)
 
-# User labels and entry input boxes
-ttk.Label(reagents_frame, text="1. Peptide scale", style="TLabel").grid(column=0, row=4, sticky="W", padx=5, pady=(10, 0))
-ttk.Entry(reagents_frame, font=('Helvetica', 12), width=20).grid(column=1, row=4, sticky="EW", padx=(2, 10), pady=2)
-ttk.Label(reagents_frame, text="mmol", style="TLabel").grid(column=2, row=4, sticky="W", padx=5, pady=(10, 0))
+# Define the callback function for enabling/disabling the "Reagent density" entry box with the radio buttons
+def toggle_reagent_density(*args):
+    if dry_wet_var.get() == "Dry":
+        entry_boxes['reagent_density'].configure(state="disabled", background="light grey")
+    else:
+        entry_boxes['reagent_density'].configure(state="normal", background="white")
 
-ttk.Label(reagents_frame, text="2. % resin used", style="TLabel").grid(column=0, row=5, sticky="W", padx=5, pady=(10, 0))
-ttk.Entry(reagents_frame, font=('Helvetica', 12), width=20).grid(column=1, row=5, sticky="EW", padx=(2, 10), pady=2)
-ttk.Label(reagents_frame, text="(%)", style="TLabel").grid(column=2, row=5, sticky="W", padx=5, pady=(10, 0))
+# Bind the callback function to the selection of the radio button
+dry_wet_var.trace_add("write", toggle_reagent_density)
 
-ttk.Label(reagents_frame, text="3. Reagent MW", style="TLabel").grid(column=0, row=6, sticky="W", padx=5, pady=(10, 0))
-ttk.Entry(reagents_frame, font=('Helvetica', 12), width=20).grid(column=1, row=6, sticky="EW", padx=(2, 10), pady=2)
-ttk.Label(reagents_frame, text="(g/mol)", style="TLabel").grid(column=2, row=6, sticky="W", padx=5, pady=(10, 0))
+## User labels and entry input boxes
+# Define GUI element specifications
+gui_elements = [
+    {"name": "1. Peptide scale", "units": "mmol", "key": "pep_scale"},
+    {"name": "2. % resin used", "units": "%", "key": "resin_used"},
+    {"name": "3. Reagent MW", "units": "g/mol", "key": "reagent_MW"},
+    {"name": "4. Reagent equiv.", "units": None, "key": "reagent_equiv"},
+    {"name": "5. Reagent density", "units": "g/mL", "key": "reagent_density"},
+    {"name": "6. Solvent Factor", "units": None, "key": "solvent_factor"},
+]
 
-ttk.Label(reagents_frame, text="4. Reagent equiv.", style="TLabel").grid(column=0, row=7, sticky="W", padx=5, pady=(10, 0))
-ttk.Entry(reagents_frame, font=('Helvetica', 12), width=20).grid(column=1, row=7, sticky="EW", padx=(2, 10), pady=2)
+# Initialize dictionaries to store widget references
+labels = {}
+entry_boxes = {}
+units_labels = {}
 
-ttk.Label(reagents_frame, text="5. Reagent density", style="TLabel").grid(column=0, row=8, sticky="W", padx=5, pady=(10, 0))
-ttk.Entry(reagents_frame, font=('Helvetica', 12), width=20).grid(column=1, row=8, sticky="EW", padx=(2, 10), pady=2)
-ttk.Label(reagents_frame, text="(g/mL)", style="TLabel").grid(column=2, row=8, sticky="W", padx=5, pady=(10, 0))
+# Iterate over the specifications to create, grid, and store elements
+for index, elem in enumerate(gui_elements, start=4):  # Starting at row 4 in the center column
+    # Label
+    labels[elem["key"]] = ttk.Label(reagents_frame, text=elem["name"], style="TLabel")
+    labels[elem["key"]].grid(column=0, row=index, sticky="W", padx=5, pady=(10, 0))
 
-ttk.Label(reagents_frame, text="6. Solvent Factor", style="TLabel").grid(column=0, row=9, sticky="W", padx=5, pady=(10, 0))
-ttk.Entry(reagents_frame, font=('Helvetica', 12), width=20).grid(column=1, row=9, sticky="EW", padx=(2, 10), pady=2)
+    # Entry Box
+    entry_boxes[elem["key"]] = ttk.Entry(reagents_frame, font=('Helvetica', 12), width=20)
+    entry_boxes[elem["key"]].grid(column=1, row=index, sticky="EW", padx=(2, 10), pady=2)
 
-# Create a function to handle the button click if needed
+    # Units Label (if applicable)
+    if elem["units"]:
+        units_key = f"{elem['key']}_units"  # Create a unique key for units labels
+        units_labels[units_key] = ttk.Label(reagents_frame, text=elem["units"], style="TLabel")
+        units_labels[units_key].grid(column=2, row=index, sticky="W", padx=5, pady=(10, 0))
+
+# Now, to access a specific widget, you call it like this:
+# entry_boxes['pep_scale'].get()  # To get the value from the peptide scale entry box
+
+# Manually invoke the function to apply the effect at startup
+toggle_reagent_density()
+
+# Create a function to handle the reagent calc button click
 def handle_button_click():
     print("Button Clicked!")  # Placeholder action
 
-# Adding the button
+# Creating the reagent calculate button
 ttk.Button(reagents_frame, text="Calculate", command=handle_button_click, style="Modern.TButton").grid(column=1, row=10, sticky="EW", padx=(2, 10), pady=2)
 
 
@@ -402,7 +430,6 @@ credits_info.insert("end", credits_info_text)
 image_path = "Images\dog temp image.gif"  # Replace this with the path to your image file
 group_photo = PhotoImage(file=image_path)
 credits_info.image_create("end", image=group_photo)  # This inserts the image at the end of the text
-
 
 # hehe
 easter_egg = """
