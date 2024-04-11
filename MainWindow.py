@@ -442,11 +442,13 @@ def handle_calc_button_click():
     reagent_MW = float(entry_boxes['reagent_MW'].get())
     reagent_equiv = float(entry_boxes['reagent_equiv'].get())
 
+    # All formulas call for the persent resin used, so convert it before passing it to the functions
+    percent_resin_used = resin_used / 100
 
     # Dry is chosen AND the first four boxes filled out --> solve for reagent mass
     if dry_wet_var.get() == "Dry":
         # Perform the calculation
-        reagent_mass = calculate_reagent_mass(pep_scale, resin_used, reagent_MW, reagent_equiv)
+        reagent_mass = calculate_reagent_mass(pep_scale, percent_resin_used, reagent_MW, reagent_equiv)
         # Update the label with the result
         answer_labels["reagent_mass"].config(text=f"{reagent_mass}")
         
@@ -455,7 +457,7 @@ def handle_calc_button_click():
         # Extract value the extra value needed for the calculation
         reagent_density = float(entry_boxes['reagent_density'].get())
         # Perform the calculation
-        reagent_vol = calculate_reagent_volume(pep_scale, resin_used, reagent_MW, reagent_equiv, reagent_density)
+        reagent_vol = calculate_reagent_volume(pep_scale, percent_resin_used, reagent_MW, reagent_equiv, reagent_density)
         # Update the label with the result
         answer_labels["reagent_vol"].config(text=f"{reagent_vol}")
 
@@ -464,7 +466,7 @@ def handle_calc_button_click():
         # Extract value the extra value needed for the calculation
         solvent_factor = float(entry_boxes['solvent_factor'].get())
         # Perform the calculation
-        solvent_vol = calculate_solvent_volume(pep_scale, resin_used, reagent_MW, reagent_equiv, solvent_factor)
+        solvent_vol = calculate_solvent_volume(pep_scale, percent_resin_used, solvent_factor)
         # Update the label with the result
         answer_labels["solvent_vol"].config(text=f"{solvent_vol}")
 

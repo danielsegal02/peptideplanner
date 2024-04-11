@@ -35,3 +35,35 @@ def calculate_charge(peptide_string, n_terminus, c_terminus):
         total_charge += 1
     
     return total_charge
+
+def calculate_reagent_mass(pep_scale, percent_resin_used, reagent_MW, reagent_equiv):
+    # Perform the calculation based on the formula
+    reagent_mass = pep_scale * percent_resin_used * reagent_MW * reagent_equiv
+
+    # Round the result to 1 decimal place
+    reagent_mass_rounded = round(reagent_mass, 1)
+
+    return reagent_mass_rounded
+
+def calculate_reagent_volume(pep_scale, percent_resin_used, reagent_MW, reagent_equiv, reagent_density):
+    # Perform the calculation based on the formula
+    modified_reagent_density = 1/reagent_density 
+    reagent_volume = pep_scale * percent_resin_used * reagent_MW * reagent_equiv * modified_reagent_density
+
+    # Round the result to no decimal place
+    reagent_volume_rounded = round(reagent_volume, 0)
+    
+    # Cast to an int to remove the decimal from the final value
+    reagent_volume_rounded = int(reagent_volume_rounded)
+
+    return reagent_volume_rounded
+
+def calculate_solvent_volume(pep_scale, percent_resin_used, solvent_factor):
+    # Perform the calculation based on the formula
+    modified_solvent_factor = solvent_factor * 10
+    solvent_volume = pep_scale * percent_resin_used * modified_solvent_factor
+
+    # Round the result to 1 decimal place
+    solvent_volume_rounded = round(solvent_volume, 1)
+
+    return solvent_volume_rounded
