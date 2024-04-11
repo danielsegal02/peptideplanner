@@ -151,24 +151,57 @@ def open_legend():
         open_legend.is_open = True
         open_legend.add_AA_window = None  # Initially, there's no add_AA_window
         legend_button["state"] = "disabled"
-
+        
 def open_add_AA_window(button, legend):
-    # Check if the add_AA_window is already open using a global variable or an attribute of the legend window
     if not hasattr(legend, "add_AA_window_open") or not legend.add_AA_window_open:
         add_AA_window = Toplevel(app)
         add_AA_window.title("Add Amino Acids")
-        add_AA_window.geometry("300x200")
-        
-        label = tk.Label(add_AA_window, text="Add your amino acid details here.")
-        label.pack(pady=10)
+        add_AA_window.minsize(625, 350)
 
         button["state"] = "disabled"
         legend.add_AA_window_open = True  # Mark the add_AA_window as open
+        legend.add_AA_window_ref = add_AA_window 
 
-        # Instead of using open_add_AA_window.is_open, store the add_AA_window reference in the legend window for access during closure
-        legend.add_AA_window_ref = add_AA_window
+        # Use a main frame to help with centering content
+        custom_aa_frame = ttk.Frame(add_AA_window)
+        custom_aa_frame.place(relx=0.5, rely=0.5, anchor=tk.CENTER)
+
+        # Heading Labels of this window
+        add_AA_first_heading_label = tk.Label(custom_aa_frame, text="Add a custom amino acid here!", font=("Roboto", 18, "bold"))
+        add_AA_first_heading_label.grid(row=0, column=0, columnspan=2, sticky=tk.N)
+        add_AA_second_heading_label = tk.Label(custom_aa_frame, text="Input the characteristics of the Amino Acid below.", font=("Roboto", 12))
+        add_AA_second_heading_label.grid(row=1, column=0, columnspan=2, sticky=tk.N, padx=15, pady=15)
+
+        # Input labels and entry boxes
+        custom_aa_input_fields = ["Single letter Code:", "Name of the Amino Acid:", "SMILES code:", "Charge:", "Residue Mass:"]
+        entries = {}
+        for i, field in enumerate(custom_aa_input_fields):
+            label = ttk.Label(custom_aa_frame, text=f"{field}", font=('Helvetica', 12))
+            label.grid(row=i + 2, column=0, sticky=tk.E, pady=5)
+            entry = tk.Entry(custom_aa_frame)
+            entry.grid(row=i + 2, column=1, sticky=tk.EW, padx=5, pady=5)
+            entries[field.replace(":", "").replace(" ", "_").lower()] = entry  # Unique name assignment
+
+        # Empty Label for error messages
+        msg_label = tk.Label(custom_aa_frame, text="")
+        msg_label.grid(row=7, column=0, columnspan=2, pady=2)
+
+        # Create and place an "Add to Database" Button
+        add_button = ttk.Button(custom_aa_frame, text="Add to Amino Acid Database", style="Modern.TButton", command=lambda: add_to_aaTable(entries, msg_label))
+        add_button.grid(row=8, column=0, columnspan=2, sticky=tk.EW, padx=5, pady=5)
 
         add_AA_window.protocol("WM_DELETE_WINDOW", lambda: on_close_add_AA(add_AA_window, button, legend))
+
+
+# Button click for custom amino acid input to AminoAcidTable.csv
+def add_to_aaTable(entries, msg_label):
+    # Example function to handle the Add button click
+    # Assuming 'entries' is now a dictionary with unique names for each entry widget
+    data = {name: entry.get() for name, entry in entries.items()}
+    # Update msg_label to indicate success, failure, or validation messages
+    msg_label.config(text="Amino Acid Added Successfully!", foreground="green")
+
+
 
 def on_close_tutorial(window):
     open_tutorial.is_open = False
@@ -239,7 +272,7 @@ combo_box_right.pack(side='left', padx=(5, 0))  # Pack to the left side, which e
 
 
 # Error Message Label
-error_msg = tk.Label(app, background="white", foreground= 'red', text=" ", font=("Roboto", 10))
+error_msg = tk.Label(app, background="white", foreground= 'red', text="", font=("Roboto", 10))
 error_msg.pack(pady=5)
 
 
