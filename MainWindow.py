@@ -394,11 +394,21 @@ Danny Takacs
 Nick Czwartacki
 
 Github link: https://github.com/danielsegal02/peptideplanner.git
+"""
+# Inserts the credit text into the widget
+credits_info.insert("end", credits_info_text)
+
+# Inserts the group pic into the widget
+image_path = "Images\dog temp image.gif"  # Replace this with the path to your image file
+group_photo = PhotoImage(file=image_path)
+credits_info.image_create("end", image=group_photo)  # This inserts the image at the end of the text
+
+
+# hehe
+easter_egg = """
 \n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n straight up homie
 """
-
-# Inserts the text into the widget
-credits_info.insert("1.0", credits_info_text)
+credits_info.insert("end", easter_egg)
 
 # Centers the text
 credits_info.tag_configure("center", justify='center') # Create a tag to center-align text
