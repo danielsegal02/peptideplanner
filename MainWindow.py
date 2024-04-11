@@ -116,9 +116,13 @@ def open_legend():
         legend.title("Amino Acid Legend")
         legend.minsize(300, 600)
         
-        # Create the treeview widget
+        # Frame for Treeview and Scrollbar
+        tree_frame = tk.Frame(legend)
+        tree_frame.pack(expand=True, fill='both')
+        
+        # Create the treeview widget within the frame
         columns = ("Code", "Name")
-        tree = ttk.Treeview(legend, columns=columns, show="headings")
+        tree = ttk.Treeview(tree_frame, columns=columns, show="headings")
         tree.heading("Code", text="Input Code")
         tree.heading("Name", text="Name")
         
@@ -126,16 +130,22 @@ def open_legend():
         tree.column("Code", minwidth=50, width=100, anchor='center')
         tree.column("Name", minwidth=100, width=150, anchor='center')
         
-        # Read the CSV file using pandas and populate the treeview with the amino acids columns
+        # Create a vertical scrollbar for the Treeview
+        v_scroll = ttk.Scrollbar(tree_frame, orient="vertical", command=tree.yview)
+        tree.configure(yscrollcommand=v_scroll.set)
+        
+        # Pack the treeview and scrollbar in the frame
+        tree.pack(side=tk.LEFT, expand=True, fill='both')
+        v_scroll.pack(side=tk.RIGHT, fill='y')
+
+        # Read the CSV file using pandas and populate the treeview with the amino acids
         df = pd.read_csv("AminoAcidTable.csv")
         for index, row in df.iterrows():
             tree.insert("", tk.END, values=(row["Code"], row["Name"]))
-                
-        tree.pack(expand=True, fill='both')
-
-        # Define the Add Amino Acid button with a command that includes itself
+        
+        # Define the Add Amino Acid button with a command that includes itself, place it outside the frame
         add_AA_button = ttk.Button(legend, text="Add a new Amino Acid", command=lambda: open_add_AA_window(add_AA_button, legend))
-        add_AA_button.pack(pady=10)
+        add_AA_button.pack(pady=10, side=tk.BOTTOM)
         
         legend.protocol("WM_DELETE_WINDOW", lambda: on_close_legend(legend))
         open_legend.is_open = True
