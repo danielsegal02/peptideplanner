@@ -426,7 +426,9 @@ def handle_calc_button_click():
         1. Wet must be chosen.
         2. The first five entry boxes in the tab must be filled out.
     - Solvent Factor: 
-        1. The solvent factor entry box must be filled out.
+        1. At least the first four entry boxes in the tab must be filled out.
+        Optional: It can be the first five entry boxes as well.
+        2. The solvent factor entry box must be filled out.
     """
     # Reset the labels 
     answer_labels["reagent_mass"].config(text=f"_________________")
