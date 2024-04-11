@@ -30,7 +30,7 @@ for i in range(len(peaks)):
 
     plt.axvline(peaks[i], ymin = 0, ymax = 0.8)
     
-    plt.text(peaks[i], 0.81, [round(peaks[i], 1),f'M$^{i+1}$$^+$'], fontsize = 11, ha='center', va='center', rotation = 30)
+    plt.text(peaks[i], 0.81, [round(peaks[i], 1),f'M$^{i+1}$$^+$'], fontsize = 12, ha='center', va='center', rotation = 30)
 
     data.append(
             { 'Peak': f'M + {i+1}',
@@ -46,9 +46,12 @@ plt.ylabel("Intensity")
 
 table_data = [dfdata.columns.tolist()] + dfdata.values.tolist()
 
-table = plt.table(cellText=table_data, loc='bottom', cellLoc='center', bbox = [0, -0.3, 1, 0.2])
+table = plt.table(cellText=table_data, loc='right', cellLoc='center')
 
-plt.subplots_adjust(bottom=0.2)
+table.auto_set_font_size(False)
+table.set_fontsize(18)
+
+plt.subplots_adjust(right=0.55)
 
 fig = plt.gcf()
 fig.set_size_inches(20, 10.5)
