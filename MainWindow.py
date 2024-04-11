@@ -443,14 +443,14 @@ def handle_calc_button_click():
     reagent_equiv = float(entry_boxes['reagent_equiv'].get())
 
 
-    # Dry is chosen --> solve for reagent mass
+    # Dry is chosen AND the first four boxes filled out --> solve for reagent mass
     if dry_wet_var.get() == "Dry":
         # Perform the calculation
         reagent_mass = calculate_reagent_mass(pep_scale, resin_used, reagent_MW, reagent_equiv)
         # Update the label with the result
         answer_labels["reagent_mass"].config(text=f"{reagent_mass}")
         
-    # Wet is chosen --> solve for reagent volume
+    # Wet is chosen AND the first five boxes filled out--> solve for reagent volume
     if dry_wet_var.get() == "Wet":
         # Extract value the extra value needed for the calculation
         reagent_density = float(entry_boxes['reagent_density'].get())
@@ -459,7 +459,7 @@ def handle_calc_button_click():
         # Update the label with the result
         answer_labels["reagent_vol"].config(text=f"{reagent_vol}")
 
-    # Solvent factor filled out --> solve for solvent volume
+    # Solvent factor filled out AND at least the first four boxes filled out--> solve for solvent volume
     if entry_boxes['solvent_factor'].get():
         # Extract value the extra value needed for the calculation
         solvent_factor = float(entry_boxes['solvent_factor'].get())
