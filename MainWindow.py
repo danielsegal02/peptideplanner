@@ -5,7 +5,7 @@ from ImageGenerator import generate_peptide_image, generate_mass_spec
 from Calculations import calculate_mass, calculate_charge, calculate_reagent_mass, calculate_reagent_volume, calculate_solvent_volume
 
 # Function to be called when the button is clicked
-def on_button_click(event=None):
+def handle_generate_button_click(event=None):
     ## Clear any previous outputs first
     # Reset images to placeholder or clear them
     chem_struct_image_label.config(image=chem_struct_placeholder_image)
@@ -187,7 +187,7 @@ def on_close_add_AA(window, button, legend):
 # Create the main application window
 app = tk.Tk()
 app.title("Peptide Planner")
-app.geometry("800x650")
+app.geometry("800x700")
 app.configure(background="white")
 style = ttk.Style() # Create a style object for later use
 
@@ -250,9 +250,9 @@ style.layout("Modern.TButton",
                  })],
              })])
 # Create the button and apply the style to the button
-button = ttk.Button(app, text="Generate Peptide", style="Modern.TButton", command=on_button_click)
-button.pack(pady=10)
-app.bind('<Return>', on_button_click)   # enables the enter key to trigger the button
+generate_button = ttk.Button(app, text="Generate Peptide", style="Modern.TButton", command=handle_generate_button_click)
+generate_button.pack(pady=10)
+app.bind('<Return>', handle_generate_button_click)   # enables the enter key to trigger the button
 
 
 ## Tabs generation
@@ -313,6 +313,10 @@ mass_spec_image_label.pack(padx=10, pady=10)
 tab3 = ttk.Frame(notebook)
 notebook.add(tab3, text='Conjugation')
 
+# Add a label at the top of tab3 for tutorial reference
+help_label = ttk.Label(tab3, text="*See tutorial for any help calculating the values*", foreground="blue", font=('Roboto', 11), anchor="center")
+help_label.pack(padx=10, pady=(10, 0))
+
 # Adjust style elements for a nicer look
 style = ttk.Style()
 style.configure("TLabel", font=('Helvetica', 12), anchor="center")
@@ -325,14 +329,36 @@ reagents_frame.pack(padx=10, pady=10, expand=True)
 reagents_frame.grid_columnconfigure(0, weight=1) # Configure the frame to use all available space and center contents
 
 ## Top answer labels
-ttk.Label(reagents_frame, text="Reagent Mass ____________ mg", style="TLabel").grid(column=1, row=0, sticky="EW")
-ttk.Label(reagents_frame, text="Reagent Volume ____________ μL", style="TLabel").grid(column=1, row=1, sticky="EW")
-ttk.Label(reagents_frame, text="Solvent Volume ____________ mL", style="TLabel").grid(column=1, row=2, sticky="EW")
+# Define answer label text specifics
+conjugation_answers = [
+    {"text_label": "Reagent Mass", "answer_text": "_________________", "units": "mg", "key": "reagent_mass"},
+    {"text_label": "Reagent Volume", "answer_text": "_________________", "units": "μL", "key": "reagent_vol"},
+    {"text_label": "Solvent Volume", "answer_text": "_________________", "units": "mL", "key": "solvent_vol"},
+]
+# Initialize dictionaries to store label references
+text_labels = {}
+answer_labels = {}
+units_labels = {}
+# Iterate over the specifications to create, grid, and store elements
+for index, spec in enumerate(conjugation_answers):
+    # Text Label
+    text_labels[spec["key"]] = ttk.Label(reagents_frame, text=spec["text_label"], style="TLabel")
+    text_labels[spec["key"]].grid(column=0, row=index, sticky="EW")
+
+    # Answer Label
+    answer_labels[spec["key"]] = ttk.Label(reagents_frame, text=spec["answer_text"], style="TLabel")
+    answer_labels[spec["key"]].grid(column=1, row=index, sticky="EW")
+
+    # Units Label
+    units_labels[spec["key"]] = ttk.Label(reagents_frame, text=spec["units"], style="TLabel")
+    units_labels[spec["key"]].grid(column=2, row=index, sticky="EW")
+# Now, you can access a specific label like so:
+# text_labels['reagent_mass'].configure(text="New Reagent Mass")  # To update the text of the reagent mass text label
 
 ## Radio Buttons
 # Creates a subframe for the radio buttons
 radio_frame = ttk.Frame(reagents_frame)
-radio_frame.grid(column=1, row=3, sticky="EW", pady=(10, 0))  # Adds 10px padding above the radio frame
+radio_frame.grid(column=1, row=3, sticky="EW", pady=(15, 5))  # Adds 10px padding above the radio frame
 radio_frame.grid_columnconfigure(0, weight=1)
 radio_frame.grid_columnconfigure(1, weight=1)
 
@@ -353,7 +379,7 @@ dry_wet_var.trace_add("write", toggle_reagent_density)
 
 ## User labels and entry input boxes
 # Define GUI element specifications
-gui_elements = [
+conjugation_entries = [
     {"name": "1. Peptide scale", "units": "mmol", "key": "pep_scale"},
     {"name": "2. % resin used", "units": "%", "key": "resin_used"},
     {"name": "3. Reagent MW", "units": "g/mol", "key": "reagent_MW"},
@@ -363,15 +389,15 @@ gui_elements = [
 ]
 
 # Initialize dictionaries to store widget references
-labels = {}
+name_labels = {}
 entry_boxes = {}
 units_labels = {}
 
 # Iterate over the specifications to create, grid, and store elements
-for index, elem in enumerate(gui_elements, start=4):  # Starting at row 4 in the center column
+for index, elem in enumerate(conjugation_entries, start=4):  # Starting at row 4 in the center column
     # Label
-    labels[elem["key"]] = ttk.Label(reagents_frame, text=elem["name"], style="TLabel")
-    labels[elem["key"]].grid(column=0, row=index, sticky="W", padx=5, pady=(10, 0))
+    name_labels[elem["key"]] = ttk.Label(reagents_frame, text=elem["name"], style="TLabel")
+    name_labels[elem["key"]].grid(column=0, row=index, sticky="W", padx=5, pady=(10, 0))
 
     # Entry Box
     entry_boxes[elem["key"]] = ttk.Entry(reagents_frame, font=('Helvetica', 12), width=20)
@@ -390,11 +416,58 @@ for index, elem in enumerate(gui_elements, start=4):  # Starting at row 4 in the
 toggle_reagent_density()
 
 # Create a function to handle the reagent calc button click
-def handle_button_click():
-    print("Button Clicked!")  # Placeholder action
+def handle_calc_button_click():
+    """
+    To calculate:
+    - Reagent Mass:
+        1. Dry must be chosen.
+        2. The first four entry boxes in the tab must be filled out.
+    - Reagent Volume:
+        1. Wet must be chosen.
+        2. The first five entry boxes in the tab must be filled out.
+    - Solvent Factor: 
+        1. The solvent factor entry box must be filled out.
+    """
+    # Reset the labels 
+    answer_labels["reagent_mass"].config(text=f"_________________")
+    answer_labels["reagent_vol"].config(text=f"_________________")
+    answer_labels["solvent_vol"].config(text=f"_________________")
+
+
+    # Extract values from entry boxes (these should always be filled out)
+    pep_scale = float(entry_boxes['pep_scale'].get())
+    resin_used = float(entry_boxes['resin_used'].get())
+    reagent_MW = float(entry_boxes['reagent_MW'].get())
+    reagent_equiv = float(entry_boxes['reagent_equiv'].get())
+
+
+    # Dry is chosen --> solve for reagent mass
+    if dry_wet_var.get() == "Dry":
+        # Perform the calculation
+        reagent_mass = calculate_reagent_mass(pep_scale, resin_used, reagent_MW, reagent_equiv)
+        # Update the label with the result
+        answer_labels["reagent_mass"].config(text=f"{reagent_mass}")
+        
+    # Wet is chosen --> solve for reagent volume
+    if dry_wet_var.get() == "Wet":
+        # Extract value the extra value needed for the calculation
+        reagent_density = float(entry_boxes['reagent_density'].get())
+        # Perform the calculation
+        reagent_vol = calculate_reagent_volume(pep_scale, resin_used, reagent_MW, reagent_equiv, reagent_density)
+        # Update the label with the result
+        answer_labels["reagent_vol"].config(text=f"{reagent_vol}")
+
+    # Solvent factor filled out --> solve for solvent volume
+    if entry_boxes['solvent_factor'].get():
+        # Extract value the extra value needed for the calculation
+        solvent_factor = float(entry_boxes['solvent_factor'].get())
+        # Perform the calculation
+        solvent_vol = calculate_solvent_volume(pep_scale, resin_used, reagent_MW, reagent_equiv, solvent_factor)
+        # Update the label with the result
+        answer_labels["solvent_vol"].config(text=f"{solvent_vol}")
 
 # Creating the reagent calculate button
-ttk.Button(reagents_frame, text="Calculate", command=handle_button_click, style="Modern.TButton").grid(column=1, row=10, sticky="EW", padx=(2, 10), pady=2)
+ttk.Button(reagents_frame, text="Calculate", command=handle_calc_button_click, style="Modern.TButton").grid(column=1, row=10, sticky="EW", padx=(2, 10), pady=2)
 
 
 ### Tab 4 for Secondary Structure
@@ -421,7 +494,7 @@ Daniel Segal
 Danny Takacs
 Nick Czwartacki
 
-Github link: https://github.com/danielsegal02/peptideplanner.git
+Github link: https://github.com/danielsegal02/peptideplanner.git\n
 """
 # Inserts the credit text into the widget
 credits_info.insert("end", credits_info_text)
