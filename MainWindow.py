@@ -182,7 +182,7 @@ def open_add_AA_window(button, legend):
             entry.grid(row=i + 2, column=1, sticky=tk.EW, padx=5, pady=5)
             entries[field.replace(":", "").replace(" ", "_").lower()] = entry  # Unique name assignment
 
-        # Empty Label for error messages
+        # Empty Label for success or failure message
         msg_label = tk.Label(custom_aa_frame, text="")
         msg_label.grid(row=7, column=0, columnspan=2, pady=2)
 
@@ -193,14 +193,69 @@ def open_add_AA_window(button, legend):
         add_AA_window.protocol("WM_DELETE_WINDOW", lambda: on_close_add_AA(add_AA_window, button, legend))
 
 
-# Button click for custom amino acid input to AminoAcidTable.csv
-def add_to_aaTable(entries, msg_label):
-    # Example function to handle the Add button click
-    # Assuming 'entries' is now a dictionary with unique names for each entry widget
-    data = {name: entry.get() for name, entry in entries.items()}
-    # Update msg_label to indicate success, failure, or validation messages
-    msg_label.config(text="Amino Acid Added Successfully!", foreground="green")
+def add_to_aaTable(entries, msg_label, csv_path="AminoAcidTable.csv"):
+    # Read the existing amino acid data
+    try:
+        aa_data = pd.read_csv(csv_path)
+    except FileNotFoundError:
+        msg_label.config(text="Error: Amino Acid database not found.", foreground="red")
+        return
+    
+    # Extract the input data from entries
+    data = {name: entry.get().strip() for name, entry in entries.items()}
 
+    ## Input Validation
+    # Validation 1: Check all inputs are filled and not just spaces
+    if any(not value or value.isspace() for value in data.values()):
+        msg_label.config(text="Error: All fields must be filled, cannot be blank or just spaces.", foreground="red")
+        return
+
+    # Validation 2: Check for spaces in all input boxes
+    if any(' ' in value for value in data.values()):
+        msg_label.config(text="Error: Inputs cannot contain spaces.", foreground="red")
+        return
+    
+    # Validation 3: Check the Single Letter Code is a single character
+    if len(data.get("single_letter_code", "")) != 1:
+        msg_label.config(text="Error: Single letter code must be a single character.", foreground="red")
+        return
+
+    # Validation 4: Check types for charge and residue mass
+    try:
+        data['charge'] = int(data.get('charge', 0))
+        data['residue_mass'] = float(data.get('residue_mass', 0.0))
+    except ValueError:
+        msg_label.config(text="Error: Charge must be an integer and residue mass must be a float.", foreground="red")
+        return
+    
+    # Validation 5: Check if the single_letter_code already exists in the CSV
+    if data["single_letter_code"] in aa_data["Code"].values:
+        msg_label.config(text="Error: Amino Acid with this single letter code already exists.", foreground="red")
+        return
+    
+    # Validation 6: Check if the Name of the Amino Acid already exists in the CSV
+    if data["name_of_the_amino_acid"].upper() in aa_data["Name"].str.upper().values:
+        msg_label.config(text="Error: Amino Acid with this name already exists.", foreground="red")
+        return
+    
+    # Validation 7: Check if the SMILES of the Amino Acid already exists in the CSV
+    if data["smiles_code"] in aa_data["SMILES"].values:
+        msg_label.config(text="Error: Amino Acid with this SMIlES already exists.", foreground="red")
+        return
+
+    # All validation passed, then it appends the inputs into the csv
+    new_row = pd.DataFrame([{
+        "Code": data["single_letter_code"].upper(),
+        "Name": data["name_of_the_amino_acid"],
+        "SMILES": data["smiles_code"],
+        "Charge": int(data["charge"]),
+        "Residue Mass": float(data["residue_mass"])
+    }])
+    
+    # Append new row to the DataFrame
+    aa_data = pd.concat([aa_data, new_row], ignore_index=True)
+    aa_data.to_csv(csv_path, index=False)
+    msg_label.config(text="Amino Acid Added Successfully!", foreground="green")
 
 
 def on_close_tutorial(window):
@@ -230,7 +285,7 @@ def on_close_add_AA(window, button, legend):
 # Create the main application window
 app = tk.Tk()
 app.title("Peptide Planner")
-app.geometry("800x700")
+app.geometry("1100x725")
 app.configure(background="white")
 style = ttk.Style() # Create a style object for later use
 
@@ -546,10 +601,10 @@ Github link: https://github.com/danielsegal02/peptideplanner.git\n
 # Inserts the credit text into the widget
 credits_info.insert("end", credits_info_text)
 
-# Inserts the group pic into the widget
-image_path = "Images\dog temp image.gif"  # Replace this with the path to your image file
-group_photo = PhotoImage(file=image_path)
-credits_info.image_create("end", image=group_photo)  # This inserts the image at the end of the text
+# Can insert a group pic into the widget
+# image_path = "Images\dog temp image.gif"  # Replace this with the path to your image file
+# group_photo = PhotoImage(file=image_path)
+# credits_info.image_create("end", image=group_photo)  # This inserts the image at the end of the text
 
 # hehe
 easter_egg = """
