@@ -11,16 +11,3 @@ Currently, there are four files:
 4. AminoAcids.py
     - This was a start of a "Database" of Amino Acids. It was not needed for this code currently, but it might be useful to build off of later.
 
-
-Setup:
-- Install python if you don't already have it downloaded. I believe it should be python 3.9 or better. (It might not matter anymore)
-- Must of rdKit installed
-    - I have it since I pip installed PyPept, but rdKit can be installed on it's own as well.
-    - I will look into uninstalling PyPept and Pyteomics and checking what exactly is needed for it to run.
- 
-
-To run the application:
-1. Open a terminal (i.e. powershell on windows)
-2. cd into the directory that has the repo cloned into it.
-3. run this command in the terminal to start the application:
-    python MainWindow.py
