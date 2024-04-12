@@ -69,7 +69,7 @@ def open_tutorial():
     if not hasattr(open_tutorial, "is_open") or not open_tutorial.is_open:
         tutorial = Toplevel(app)
         tutorial.title("Tutorial")
-        tutorial.geometry("600x600")
+        tutorial.geometry("700x700")
         tutorial.protocol("WM_DELETE_WINDOW", lambda: on_close_tutorial(tutorial))
         open_tutorial.is_open = True
         tutorial_button["state"] = "disabled"
@@ -80,32 +80,106 @@ def open_tutorial():
 
         # Tutorial Content
         tutorial_text = """
-1. In the gray text box toward the top of the screen, enter the desired amino acid sequence. Be sure to type each amino acid using its corresponding letter/symbol as listed in the Legend. (For reference, you can click “Open Legend”)
+NOTE: Do NOT close the Terminal window that pops up when opening the App, it is required for it to run 
 
-2. Click “Generate Peptide” to populate the functions under all tabs. The chemical structure, mass, and net charge of the peptide should appear on the first page of the application.
+Getting Started 
 
-3. To view the predicted mass spectrometry graph, click the “Mass Spectrometry” tab.
+1. In the white text box toward the top of the screen, enter the desired amino acid sequence. Be sure to type each amino acid using it corresponding letter/symbol as listed in the Legend. (For reference, you can click “Open Legend”, which is scrollable) 
 
-4. To do reagent calculations, click the “Conjugation” tab.
+2. Select the N- and C-terminus from the drop-down menu to the left and right of the text box. (N on the left and C on the right) 
 
-5. To view the predicted secondary structure, click the “Structure” tab.
+3. Click “Generate Peptide” or press the ‘Enter’ key to populate the functions under all tabs. The chemical structure, mass, and net charge of the peptide should appear on the first page of the application. 
 
-6. To enter a new amino acid sequence, clear the gray text box at the top and type in the new sequence. Click “Generate Peptide”.
+4. To enter a new amino acid sequence, clear the white text box at the top and type in the new sequence. Click “Generate Peptide”. 
+
+Mass Spectrometry 
+
+1. Click the “Mass Spectrometry” tab. 
+
+2. On the left side of the tab, the mass spectrometry graph will appear and to the right a table of all the values produced at each peak. 
+
+Reagent Calculations 
+
+1. Click the “Conjugation” tab. 
+
+2. Select whether you are going to use a dry or liquid reagent. The app will already default to dry.  
+
+3. Input all necessary values in their corresponding boxes. Make sure the values are in the correct units (specified to the right of each input box). 
+
+4. To calculate the ‘Reagent Mass’: 
+
+	- Choose the dry option  
+
+    - Then you must input numbers into fields 1 through 4 
+
+    - If you want to calculate ‘Solvent Volume’, you must also input a number into the ‘Solvent Factor’ field 
+
+5. To calculate the ‘Reagent Volume’: 
+
+    - Choose the wet option 
+
+    - Then you must input numbers into fields 1 through 5 
+
+    - Again, if you want to calculate ‘Solvent Volume’, you must also input a number into the ‘Solvent Factor’ field 
+
+Secondary Structure 
+
+1. To view the predicted secondary structure, click the “Structure” tab. 
+
+Adding Custom Amino Acid 
+
+1. Click “Open Legend” at the top of the top of the application. 
+
+2. At the bottom of the legend window, click “Add a new Amino Acid”. 
+
+4. When inputting text into the fields remember: 
+
+	- The Single Letter Code must be a single character that does not already exist in the database. 
+
+		- Characters can be anything, including but not limited to letters, numbers, or symbols (!, ?, \, etc...) 
+
+	- The Name or the SMILES of the Amino Acid cannot already exist in the database 
+
+	- The Charge must be an integer value 
+
+	- The Residue Mass must also be a floating-point number (which is a number that includes a decimal. 
+
+5. If the inputs are not accepted, the program will report back an error when trying to add it.  
+
+6. If the inputs are all valid, you will get a success message after clicking the button.  
+
+7. The legend window must be closed and reopened to see the amino acids added. 
         """
-
+        
         # Create a Text widget for the tutorial content
         tutorial_content = tk.Text(tutorial, wrap="word", font=("Arial", 12), bg="light grey", borderwidth=2, relief="solid")
         tutorial_content.insert("1.0", tutorial_text)
 
-        # Define a tag for bold and slightly larger font for the numbers
+        # Define tags
         tutorial_content.tag_configure("list_number", font=("Arial", 14, "bold"))
+        tutorial_content.tag_configure("heading_bold", font=("Arial", 12, "bold"))
 
-        # Find all occurrences of a pattern (in this case, the numbers followed by a period)
+        # Find all occurrences of the numbers followed by a period for list numbering
         import re
         for match in re.finditer(r"\d+\.", tutorial_text):
             start = "1.0 + {} chars".format(match.start())
             end = "1.0 + {} chars".format(match.end())
             tutorial_content.tag_add("list_number", start, end)
+
+        # Apply bold tag to specified headings and sentences
+        headings_and_sentences = [
+            "NOTE: Do NOT close the Terminal window that pops up when opening the App, it is required for it to run",
+            "Getting Started",
+            "Mass Spectrometry",
+            "Reagent Calculations",
+            "Secondary Structure",
+            "Adding Custom Amino Acid"
+        ]
+        for text in headings_and_sentences:
+            start_idx = tutorial_content.search(text, "1.0", tk.END)
+            if start_idx:
+                end_idx = f"{start_idx} + {len(text)}c"
+                tutorial_content.tag_add("heading_bold", start_idx, end_idx)
 
         tutorial_content.config(state="disabled")  # Make the text widget read-only
         tutorial_content.pack(padx=10, pady=10, fill="both", expand=True)
