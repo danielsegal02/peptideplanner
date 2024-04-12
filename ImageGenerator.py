@@ -27,13 +27,9 @@ def modify_n_terminus(pep_smiles_lst):
     Returns:
         list of str: The original list with the N-terminus of the first amino acid modified.
     """
-    # Check if the list is empty
-    if not pep_smiles_lst:
-        return pep_smiles_lst
-
     # Acetyl group SMILES for N-terminus modification
-    amine_smiles = 'CC(=O)O'
-    amine_mol = Chem.MolFromSmiles(amine_smiles)
+    acetyl_smiles = 'CC(=O)O'
+    amine_mol = Chem.MolFromSmiles(acetyl_smiles)
 
     # Take the first amino acid SMILES from the list
     last_aa_smiles = pep_smiles_lst[0]
@@ -53,9 +49,9 @@ def modify_n_terminus(pep_smiles_lst):
 
     return pep_smiles_lst
 
-def modify_c_terminus(pep_smiles_lst):
+def modify_c_terminus(final_smiles):
     """
-    Modifies the C-terminus of the last amino acid in a list of amino acid SMILES strings by reacting it with an amine group.
+    Modifies the C-terminus of the last amino acid in a list of amino acid SMILES strings by replacing the carboxylic acid group with an amide group.
     
     Args:
         pep_smiles_lst (list of str): List of SMILES strings for the amino acids.
@@ -63,31 +59,23 @@ def modify_c_terminus(pep_smiles_lst):
     Returns:
         list of str: The original list with the C-terminus of the last amino acid modified.
     """
-    # Check if the list is empty
-    if not pep_smiles_lst:
-        return pep_smiles_lst
+    # Define the carboxylic acid and amide groups
+    carboxylic_acid = "C(=O)O"
+    amide_group = "C(=O)N"
 
-    # Amine group SMILES for C-terminus modification
-    amine_smiles = 'N'
-    amine_mol = Chem.MolFromSmiles(amine_smiles)
+    # Reverse the strings
+    final_smiles_reversed = final_smiles[::-1]
+    carboxylic_acid_reversed = carboxylic_acid[::-1]
+    amide_group_reversed = amide_group[::-1]
 
-    # Take the last amino acid SMILES from the list
-    last_aa_smiles = pep_smiles_lst[-1]
-    last_aa_mol = Chem.MolFromSmiles(last_aa_smiles)
+    # Replace the first occurrence of the reversed carboxylic acid with the reversed amide group
+    modified_smiles_reversed = final_smiles_reversed.replace(carboxylic_acid_reversed, amide_group_reversed, 1)
 
-    # Define a reaction for adding the amine group to the C-terminus
-    # The reaction targets a carboxyl group and attaches the amine group, forming an amide bond
-    amidation_rxn = rdChemReactions.ReactionFromSmarts('[C:1](=[O:2])O.[N:3]>>[C:1](=[O:2])[N:3]')
-    product_set = amidation_rxn.RunReactants((last_aa_mol, amine_mol))
+    # Reverse the result back to get the original orientation with the last occurrence replaced
+    modified_final_smiles = modified_smiles_reversed[::-1]
 
-    if product_set:
-        # Update the last amino acid with the amidated product
-        modified_last_aa_mol = product_set[0][0]
-        modified_last_aa_smiles = Chem.MolToSmiles(modified_last_aa_mol)
-        # Replace the last amino acid SMILES in the list with the modified one
-        pep_smiles_lst[-1] = modified_last_aa_smiles
+    return modified_final_smiles
 
-    return pep_smiles_lst
 
 
 def combine_smiles(amino_acids_smiles):
@@ -132,36 +120,58 @@ def combine_smiles(amino_acids_smiles):
 ## Functions to generate the actual images for the GUI
 
 def generate_peptide_image(pep_str, n_terminus, c_terminus):
+    # Turn input into equivalent SMILES codes
     pep_smiles_lst = get_smiles_from_code(pep_str)
+    # Modify the first amino acid if the Acetyl option is chosen
     if n_terminus == "Acetyl":
         pep_smiles_lst = modify_n_terminus(pep_smiles_lst)
-    if c_terminus == "Amide":
-        pep_smiles_lst = modify_c_terminus(pep_smiles_lst)
+    # Combine all the amino acids smiles into one long SMILES code
     final_smiles = combine_smiles(pep_smiles_lst)
+    # Modifies the c-terminus after the smiles has been combined
+    if c_terminus == "Amide":
+        final_smiles = modify_c_terminus(final_smiles)
+    # Creates a molecule object from the final, combined, modified SMILES
     mol = Chem.MolFromSmiles(final_smiles)
+    # Sets the preferences to get the structure to try and have a straight backbone
     rdDepictor.SetPreferCoordGen(True)
     rdDepictor.Compute2DCoords(mol)
+    # Produces the image from the molecule object in the designated path (saves within the Images folder)
     image_path = 'Images/peptide_image.png'
-    Draw.MolToFile(mol, image_path, size=(600, 230))  #customize size to window size if possible
+    Draw.MolToFile(mol, image_path, size=(800, 300))  # try to customize size to window size if possible
     return image_path
 
 def generate_mass_spec(mass, charge):
-    plt.figure(figsize=(6, 3.5)) 
+    # Increase figure size for better layout of plot and table
+    plt.figure(figsize=(12, 4))  # Increase width to accommodate table on the right
     peaks = [0 for i in range(charge)]
-
+    
     while charge > 0:
         peaks[charge - 1] = (mass + charge) / charge
         charge -= 1
-
+    
+    # Plot each peak
     for i in range(len(peaks)):
         plt.axvline(peaks[i], ymin=0, ymax=0.8)
-        plt.text(peaks[i], 0.81,  [round(peaks[i], 1),f'M$^{i+1}$$^+$'], fontsize = 11, ha='center', va='center', rotation = 30)
+        plt.text(peaks[i], 0.81, [round(peaks[i], 1), f'M$^{i+1}$$^+$'], fontsize=11, ha='center', va='center', rotation=30)
 
+    # Adjust the plot area to make room for the table on the right
+    plt.subplots_adjust(left=0.1, right=0.6)
     plt.xlim(0, max(peaks)+100)
     plt.xlabel("m/z")
     plt.ylabel("Intensity")
+    
+    # Data for table
+    data = [{'Peak': f'M + {i+1}', 'Mass': peaks[i]} for i in range(len(peaks))]
+    dfdata = pd.DataFrame(data)
 
-    file_path="Images/MassSpec.png"
+    # Create the table on the right side of the plot
+    table_data = [dfdata.columns.tolist()] + dfdata.values.tolist()
+    final_table = plt.table(cellText=table_data, loc='right', cellLoc='center', bbox=[1.1, 0.0, 0.4, 1])
+    final_table.auto_set_font_size(False)
+    final_table.set_fontsize(7.5)
+
+    # Save the finished image in the designated path (saves within the Images Folder)
+    file_path = "Images/MassSpec.png"
     plt.savefig(file_path, bbox_inches="tight")
     plt.close()  # Close the plot to free up memory
     return file_path
