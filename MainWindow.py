@@ -106,9 +106,9 @@ Reagent Calculations
 
 3. Input all necessary values in their corresponding boxes. Make sure the values are in the correct units (specified to the right of each input box). 
 
-4. To calculate the ‘Reagent Mass’: 
+4. To calculate the 'Reagent Mass':
 
-	- Choose the dry option  
+    - Choose the dry option  
 
     - Then you must input numbers into fields 1 through 4 
 
@@ -142,7 +142,7 @@ Adding Custom Amino Acid
 
 	- The Charge must be an integer value 
 
-	- The Residue Mass must also be a floating-point number (which is a number that includes a decimal. 
+	- The Residue Mass must also be a floating-point number (which is a number that can have a decimal point after but does not need it). 
 
 5. If the inputs are not accepted, the program will report back an error when trying to add it.  
 
@@ -299,7 +299,7 @@ def add_to_aaTable(entries, msg_label, csv_path="AminoAcidTable.csv"):
         data['charge'] = int(data.get('charge', 0))
         data['residue_mass'] = float(data.get('residue_mass', 0.0))
     except ValueError:
-        msg_label.config(text="Error: Charge must be an integer and residue mass must be a float.", foreground="red")
+        msg_label.config(text="Error: Charge must be an integer and residue mass must\n be a number with or without a decimal point.", foreground="red")
         return
     
     # Validation 5: Check if the single_letter_code already exists in the CSV
