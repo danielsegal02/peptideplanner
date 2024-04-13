@@ -77,7 +77,6 @@ def modify_c_terminus(final_smiles):
     return modified_final_smiles
 
 
-
 def combine_smiles(amino_acids_smiles):
     """
     Combines individual amino acid SMILES into a single peptide SMILES string using RDKit.
@@ -89,20 +88,20 @@ def combine_smiles(amino_acids_smiles):
         str: A single SMILES string representing the peptide.
     """
     # Initialize an empty molecule that will serve as the base for the peptide chain
-    peptide_mol = Chem.RWMol()
+    peptide_mol = None
 
     # Loop through each amino acid SMILES string
     for i, smiles in enumerate(amino_acids_smiles):
         # Convert the SMILES string to a RDKit molecule
         aa_mol = Chem.MolFromSmiles(smiles)
         
-        if i == 0:
+        if peptide_mol is None:
             # For the first amino acid, just add it to the peptide molecule
             peptide_mol = Chem.RWMol(aa_mol)
         else:
             # For subsequent amino acids, perform a peptide bond formation reaction
             # Define a generic peptide coupling reaction
-            # The reaction removes a water molecule to form the peptide bond
+            # The reaction removes a water molecule to form the peptide bond (I think)
             peptide_rxn = rdChemReactions.ReactionFromSmarts('[C:1](=[O:2])O.[N:3]>>[C:1](=[O:2])[N:3]')
             # Combine the current peptide molecule with the new amino acid molecule
             product_set = peptide_rxn.RunReactants((peptide_mol, aa_mol))
@@ -117,28 +116,36 @@ def combine_smiles(amino_acids_smiles):
     return final_peptide_smiles
 
 
+
 ## Functions to generate the actual images for the GUI
 
 def generate_peptide_image(pep_str, n_terminus, c_terminus):
     # Turn input into equivalent SMILES codes
     pep_smiles_lst = get_smiles_from_code(pep_str)
+
     # Modify the first amino acid if the Acetyl option is chosen
     if n_terminus == "Acetyl":
         pep_smiles_lst = modify_n_terminus(pep_smiles_lst)
+    
     # Combine all the amino acids smiles into one long SMILES code
     final_smiles = combine_smiles(pep_smiles_lst)
+    
     # Modifies the c-terminus after the smiles has been combined
     if c_terminus == "Amide":
         final_smiles = modify_c_terminus(final_smiles)
+    
     # Creates a molecule object from the final, combined, modified SMILES
     mol = Chem.MolFromSmiles(final_smiles)
+    
     # Sets the preferences to get the structure to try and have a straight backbone
     rdDepictor.SetPreferCoordGen(True)
     rdDepictor.Compute2DCoords(mol)
+    
     # Produces the image from the molecule object in the designated path (saves within the Images folder)
     image_path = 'Images/peptide_image.png'
     Draw.MolToFile(mol, image_path, size=(800, 300))  # try to customize size to window size if possible
     return image_path
+
 
 def generate_mass_spec(mass, charge):
     # Increase figure size for better layout of plot and table
