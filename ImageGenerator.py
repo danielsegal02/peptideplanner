@@ -168,14 +168,14 @@ def generate_mass_spec(mass, charge):
     plt.ylabel("Intensity")
     
     # Data for table
-    data = [{'Peak': f'M + {i+1}', 'Mass': peaks[i]} for i in range(len(peaks))]
+    data = [{'Peak': f'M + {i+1}', 'Mass': f"{peaks[i]:.3f}"} for i in range(len(peaks))]
     dfdata = pd.DataFrame(data)
 
     # Create the table on the right side of the plot
     table_data = [dfdata.columns.tolist()] + dfdata.values.tolist()
     final_table = plt.table(cellText=table_data, loc='right', cellLoc='center', bbox=[1.1, 0.0, 0.4, 1])
     final_table.auto_set_font_size(False)
-    final_table.set_fontsize(7.5)
+    final_table.set_fontsize(15)
 
     # Save the finished image in the designated path (saves within the Images Folder)
     file_path = "Images/MassSpec.png"
