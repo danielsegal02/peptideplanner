@@ -29,7 +29,7 @@ def calculate_charge(peptide_string, n_terminus, c_terminus):
     code_to_charge = df.set_index('Code')['Charge'].to_dict()
     
     # Sum the Charge for each code in the string
-    total_charge = sum([code_to_charge[code] for code in peptide_string if code in code_to_charge]) + 1
+    total_charge = sum([code_to_charge[code] for code in peptide_string if code in code_to_charge])
     
     if n_terminus == "Amine":
         total_charge += 1
