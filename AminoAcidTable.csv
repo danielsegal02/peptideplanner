@@ -2,11 +2,11 @@ Code,Name,SMILES,Charge,Residue Mass
 O,Ornithine ,C(C[C@H](C(=O)O)N)CN,1,114.14472
 U,Selenocysteine,N[C@H](C[SeH])C(=O)O,0,149.04472
 Z,Pentafluorophenyl Alanine,N[C@H](Cc1c(F)c(F)c(F)c(F)c1F)C(=O)O,0,237.12472
-K,Lysine ,[C@H]((N)C(=O)O)CCCCN,1,128.09496
+K,Lysine ,C(C(=O)O)(N)[C@@H]CCCN,1,128.09496
 R,Argenine ,C(C[C@H](C(=O)O)N)CN=C(N)N,1,156.10111
 H,Histidine,C1=C(NC=N1)C[C@H](C(=O)O)N,0,137.05891
 D,Aspartic Acid,C([C@H](C(=O)O)N)C(=O)O,0,115.02694
-E,Glutamic Acid,[C@H]((C(=O)O)N))C(CC(=O)O),0,129.04259
+E,Glutamic Acid,N[C@H](C(=O)O)C(CC(=O)O),0,129.04259
 S,Serine,C([C@H](C(=O)O)N)O,0,87.03203
 T,Threonine,C[C@H]([C@H](C(=O)O)N)O,0,101.04768
 N,Asparagine,C([C@H](C(=O)O)N)C(=O)N,0,114.04293
@@ -25,7 +25,7 @@ W,Tryptophan,C1=CC=C2C(=C1)C(=CN2)C[C@H](C(=O)O)N,0,186.07931
 o,d-Ornithine ,C(C[C@@H](C(=O)O)N)CN,1,114.14472
 u,d-Selenocysteine,C([C@@H](C(=O)O)N)[Se],0,149.04472
 z,d-Pentafluorophenyl Alanine,N[C@@H](Cc1c(F)c(F)c(F)c(F)c1F)C(=O)O,0,237.12472
-k,d-Lysine ,[C@@H]((N)C(=O)O)CCCCN,1,128.09496
+k,d-Lysine ,C(C(=O)O)(N)[C@@H]CCCN,1,128.09496
 r,d-Argenine ,C(C[C@@H](C(=O)O)N)CN=C(N)N,1,156.10111
 h,d-Histidine,C1=C(NC=N1)C[C@@H](C(=O)O)N,0,137.05891
 d,d-Aspartic Acid,C([C@@H](C(=O)O)N)C(=O)O,0,115.02694
@@ -44,3 +44,5 @@ m,d-Methionine ,CSCC[C@@H](C(=O)O)N,0,131.04049
 f,d-Phenylalanine,C1=CC=C(C=C1)C[C@@H](C(=O)O)N,0,147.06841
 w,d-Tyrosine,C1=CC=C2C(=C1)C(=CN2)C[C@@H](C(=O)O)N,0,186.07931
 y,d-Tryptophan,C1=CC(=CC=C1C[C@@H](C(=O)O)N)O ,0,163.06333
+,,,,
+,,,,
