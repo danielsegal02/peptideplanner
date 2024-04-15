@@ -25,11 +25,11 @@ W,Tryptophan,C1=CC=C2C(=C1)C(=CN2)C[C@H](C(=O)O)N,0,186.07931
 o,d-Ornithine ,C(C[C@@H](C(=O)O)N)CN,1,114.14472
 u,d-Selenocysteine,C([C@@H](C(=O)O)N)[Se],0,149.04472
 z,d-Pentafluorophenyl Alanine,N[C@@H](Cc1c(F)c(F)c(F)c(F)c1F)C(=O)O,0,237.12472
-k,d-Lysine ,C(C(=O)O)(N)[C@@H]CCCN,1,128.09496
+k,d-Lysine ,C(C(=O)O)(N)[C@H]CCCN,1,128.09496
 r,d-Argenine ,C(C[C@@H](C(=O)O)N)CN=C(N)N,1,156.10111
 h,d-Histidine,C1=C(NC=N1)C[C@@H](C(=O)O)N,0,137.05891
 d,d-Aspartic Acid,C([C@@H](C(=O)O)N)C(=O)O,0,115.02694
-e,d-Glutamic Acid,[C@@H]((C(=O)O)N))C(CC(=O)O),0,129.04259
+e,d-Glutamic Acid,N[C@@H](C(=O)O)C(CC(=O)O),0,129.04259
 s,d-Serine,C([C@@H](C(=O)O)N)O,0,87.03203
 t,d-Threonine,C[C@@H]([C@@H](C(=O)O)N)O,0,101.04768
 n,d-Asparagine,C([C@@H](C(=O)O)N)C(=O)N,0,114.04293
