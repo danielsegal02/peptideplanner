@@ -359,7 +359,9 @@ def on_close_add_AA(window, button, legend):
 # Create the main application window
 app = tk.Tk()
 app.title("Peptide Planner")
-app.geometry("1100x725")
+screen_width = app.winfo_screenwidth()
+screen_height = app.winfo_screenheight()
+app.geometry(f"{screen_width}x{screen_height}+0+0")
 app.configure(background="white")
 style = ttk.Style() # Create a style object for later use
 
