@@ -1,0 +1,3 @@
+Links to Website Sources:
+- https://pepcalc.com
+- https://web.expasy.org/peptide_mass/

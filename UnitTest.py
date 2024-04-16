@@ -5,19 +5,13 @@ from Calculations import calculate_mass, calculate_charge
 # FOR MASS:
 # - https://pepcalc.com
 # - https://web.expasy.org/peptide_mass/
-# - The excel provided by the Medina Lab
-# CHARGE: calculated manually in the UnitTest.py itself
-# MASS SPECTROMETRY:
-#
+# CHARGE AND MASS SPEC: calculated manually in the UnitTest.py itself
+# - Word file with research from the Medina lab for verifying mass spec was provided
+# - Will be in a folder called "Sources"
 # NOTES:
 # - mass function gives "monoisotopic mass"
 # - O, K, R, o, k, r amino acids raise charge by 1, all others make no change 
 #
-# RECOMMENDED PEPTIDES:
-#
-#
-#
-
 # Amino Acids for testing the validity mass and charge calculations
 peptides=["ARN","DARN","ARNDE","EEA"]
 correct_masses=[359.19,474.22,603.26,347.13] # the monoisotpoic mass before adjusting for termini
@@ -47,7 +41,6 @@ for i in range(len(peptides)):
             test_charge+=1
         if element=="o" or element == "k" or element == "r":
             test_charge+=1
-    test_charge+=1
     
     if n_terminus[i] == "Acetyl":
         correct_masses[i] += 42.04
@@ -60,8 +53,8 @@ for i in range(len(peptides)):
     calc_mass=round(calculate_mass(peptides[i],n_terminus[i],c_terminus[i]),2)
     calc_charge=calculate_charge(peptides[i],n_terminus[i],c_terminus[i])
     print("Calculated Mass Of ",peptides[i],": ",calc_mass)
-    print("Calculated Charge Of ",peptides[i],": ",calc_charge)
     print("Expected Mass Of ",peptides[i],":",correct_masses[i])
+    print("Calculated Charge Of ",peptides[i],": ",calc_charge)
     print("Expected Charge Of ",peptides[i],":",test_charge)
     
     
