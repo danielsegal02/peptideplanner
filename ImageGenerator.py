@@ -143,13 +143,13 @@ def generate_peptide_image(pep_str, n_terminus, c_terminus):
     
     # Produces the image from the molecule object in the designated path (saves within the Images folder)
     image_path = 'Images/peptide_image.png'
-    Draw.MolToFile(mol, image_path, size=(800, 300))  # try to customize size to window size if possible
+    Draw.MolToFile(mol, image_path, size=(800, 300))  # change the sizing based on the computer screen size
     return image_path
 
 
 def generate_mass_spec(mass, charge):
     # Increase figure size for better layout of plot and table
-    plt.figure(figsize=(12, 4))  # Increase width to accommodate table on the right
+    plt.figure(figsize=(12, 4))  # change the sizing based on the computer screen size (Note: keep the ratio similar)
     peaks = [0 for i in range(charge)]
     
     while charge > 0:
