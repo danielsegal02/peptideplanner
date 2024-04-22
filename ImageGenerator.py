@@ -102,7 +102,7 @@ def combine_smiles(amino_acids_smiles):
             # For subsequent amino acids, perform a peptide bond formation reaction
             # Define a generic peptide coupling reaction
             # The reaction removes a water molecule to form the peptide bond (I think)
-            peptide_rxn = rdChemReactions.ReactionFromSmarts('[C:1](=[O:2])O.[N:3]>>[C:1](=[O:2])[N:3]')
+            peptide_rxn = rdChemReactions.ReactionFromSmarts('[CH1:1][CH0:2](=[O:3])O.[N:4]>>[CH1:1][CH0:2](=[O:3])[N:4]')
             # Combine the current peptide molecule with the new amino acid molecule
             product_set = peptide_rxn.RunReactants((peptide_mol, aa_mol))
             
