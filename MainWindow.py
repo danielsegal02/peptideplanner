@@ -81,7 +81,7 @@ def open_tutorial():
 
         # Tutorial Content
         tutorial_text = """
-NOTE: Do NOT close the Terminal window that pops up when opening the App, it is required for it to run 
+NOTE: Do NOT close the Terminal window that pops up when opening the App, it is required for the application to run! 
 
 Getting Started 
 
@@ -89,9 +89,48 @@ Getting Started
 
 2. Select the N- and C-terminus from the drop-down menu to the left and right of the text box. (N on the left and C on the right) 
 
-3. Click “Generate Peptide” or press the ‘Enter’ key to populate the functions under all tabs. The chemical structure, mass, and net charge of the peptide should appear on the first page of the application. 
+3. Click “Generate Peptide” or press the ‘Enter’ key to populate the functions under all tabs. The chemical structure, mass, and net charge of the peptide should appear on the first tab of the application. 
 
 4. To enter a new amino acid sequence, clear the white text box at the top and type in the new sequence. Click “Generate Peptide”. 
+
+5. If your input is invalid, there will be an error message that appears. For questions on what classifies a valid input, see the legend.
+
+The Legend
+
+1. Click on the "Open Legend" button to view a list of all the available amino acids that are able to be inputted.
+
+2. The window is scrollable, and automatically populates with all the amino acids that are accepted for input. 
+
+3. If you would like to add a new custom amino acid to use within the app, see the "Adding a Custom Amino Acid" section of the tutorial.
+
+Adding Custom Amino Acid 
+
+1. Click “Open Legend” at the top of the top of the application. 
+
+2. At the bottom of the legend window, click “Add a new Amino Acid”. 
+
+4. When inputting text into the fields remember: 
+
+	- The Single Letter Code must be a single character that does not already exist in the database. 
+
+		- Characters can be anything, including but not limited to letters, numbers, or symbols (!, ?, \, etc...) 
+
+	- The Name or the SMILES of the Amino Acid cannot already exist in the database 
+
+	- The Charge must be an integer value 
+
+	- The Residue Mass must also be a floating-point number (which is a number that can have a decimal point after but does not need it). 
+
+5. If the inputs are not accepted, the program will report back an error when trying to add it.  
+
+6. If the inputs are all valid, you will get a success message after clicking the button.  
+    
+    Note: The only validation for the SMILES just checks to see if it already exists. 
+          This means that if the input is incorrect, it may still add the new amino acid. 
+          However, when using the new amino acid to generate a structure, if the SMILES is wrong
+          it might not work to create the correct structure, or any structure at all.
+
+7. The legend window must be closed and reopened to see the amino acid(s) added. 
 
 Mass Spectrometry 
 
@@ -122,35 +161,7 @@ Reagent Calculations
     - Then you must input numbers into fields 1 through 5 
 
     - Again, if you want to calculate ‘Solvent Volume’, you must also input a number into the ‘Solvent Factor’ field 
-
-Secondary Structure 
-
-1. To view the predicted secondary structure, click the “Structure” tab. 
-
-Adding Custom Amino Acid 
-
-1. Click “Open Legend” at the top of the top of the application. 
-
-2. At the bottom of the legend window, click “Add a new Amino Acid”. 
-
-4. When inputting text into the fields remember: 
-
-	- The Single Letter Code must be a single character that does not already exist in the database. 
-
-		- Characters can be anything, including but not limited to letters, numbers, or symbols (!, ?, \, etc...) 
-
-	- The Name or the SMILES of the Amino Acid cannot already exist in the database 
-
-	- The Charge must be an integer value 
-
-	- The Residue Mass must also be a floating-point number (which is a number that can have a decimal point after but does not need it). 
-
-5. If the inputs are not accepted, the program will report back an error when trying to add it.  
-
-6. If the inputs are all valid, you will get a success message after clicking the button.  
-
-7. The legend window must be closed and reopened to see the amino acids added. 
-        """
+"""
         
         # Create a Text widget for the tutorial content
         tutorial_content = tk.Text(tutorial, wrap="word", font=("Arial", 12), bg="light grey", borderwidth=2, relief="solid")
@@ -169,12 +180,13 @@ Adding Custom Amino Acid
 
         # Apply bold tag to specified headings and sentences
         headings_and_sentences = [
-            "NOTE: Do NOT close the Terminal window that pops up when opening the App, it is required for it to run",
+            "NOTE: Do NOT close the Terminal window that pops up when opening the App, it is required for the application to run!",
             "Getting Started",
+            "The Legend",
+            "Adding Custom Amino Acid",
             "Mass Spectrometry",
             "Reagent Calculations",
-            "Secondary Structure",
-            "Adding Custom Amino Acid"
+            "Secondary Structure"
         ]
         for text in headings_and_sentences:
             start_idx = tutorial_content.search(text, "1.0", tk.END)
