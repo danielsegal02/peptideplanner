@@ -14,9 +14,9 @@ Welcome to the Peptide Planner application! This software is designed to assist 
     - This is the folder that stores all the generated images, as well as the group picture in the credit tab.
 6. **SecondaryStructure Folder**
     - This contains all necessary files for running the separate application to generate the secondary structure.
-        - SecondStruct.py: Contains the tkinter code for the window that retrieves the input for the secondary structure generation. 
-        - SecStructConnector.py: Contains the functions that connects the tkinter application to the jupyter notebook file.
-        - secondaystructure.ipynb: Contains the jupyter notebook code that generates the actual secondary structure.
+        - **SecondStruct.py**: Contains the tkinter code for the window that retrieves the input for the secondary structure generation. 
+        - **SecStructConnector.py**: Contains the functions that connects the tkinter application to the jupyter notebook file.
+        - **secondaystructure.ipynb**: Contains the jupyter notebook code that generates the actual secondary structure.
 7. **UnitTest.py**
     - This is a unit tester file that checks the accuracy of our functions. When run, it prints the outputs of our function calls and compares them to accurate numbers of what they should be.
 8. **UnitTester/Sources**
