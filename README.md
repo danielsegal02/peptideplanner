@@ -1,5 +1,5 @@
 # Peptide Planner Application
-
+Welcome to the Peptide Planner application! This software is designed to assist in the planning and visualization of peptides by generating images of chemical structures, mass spec analyses, and calculating values of various other properties of inputted peptides.
 
 ## File Descriptions:
 1. **MainWindow.py**
@@ -31,5 +31,5 @@
 ## Running the application:
 1. Open a terminal (i.e. powershell on windows)
 2. cd into the directory that has the repo cloned into it.
-3. run this command in the terminal to start the application:
+3. Run this command in the terminal to start the application:
     python MainWindow.pya
