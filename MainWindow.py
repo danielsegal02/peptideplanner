@@ -1,6 +1,7 @@
 import tkinter as tk
 from tkinter import PhotoImage, ttk, Toplevel
 import pandas as pd
+from PIL import Image, ImageTk
 from ImageGenerator import generate_peptide_image, generate_mass_spec
 from Calculations import calculate_mass, calculate_charge, calculate_reagent_mass, calculate_reagent_volume, calculate_solvent_volume
 
@@ -648,18 +649,19 @@ def handle_calc_button_click():
 ttk.Button(reagents_frame, text="Calculate", command=handle_calc_button_click, style="Modern.TButton").grid(column=1, row=10, sticky="EW", padx=(2, 10), pady=2)
 
 
-### Tab 4 for Secondary Structure
+### Tab 4 for Credits
 tab4 = ttk.Frame(notebook)
-notebook.add(tab4, text='Structure')
+notebook.add(tab4, text='Credits')
 
-### Tab 5 for Credits
-tab5 = ttk.Frame(notebook)
-notebook.add(tab5, text='Credits')
+## Credit Text
+# Frame for the text
+credit_text_frame = tk.Frame(tab4)
+credit_text_frame.pack(side=tk.LEFT, fill="both", expand=True)
 
-# Add a Text widget to tab5 for displaying the credits information
-credits_info = tk.Text(tab5, wrap="word", font=("Cambria", 12), bg="white", borderwidth=2, relief="solid", height=10)
+# Add a Text widget to credit_text_frame for displaying the credits information
+credits_info = tk.Text(credit_text_frame, wrap="word", font=("Cambria", 12), bg="white", borderwidth=2, relief="solid", height=10)
 credits_info_text = """
-This application was a result of a Capstone project for Medina Labs. 
+\n\nThis application was a result of a Capstone project for Medina Labs. 
 
 Penn State University Main Campus
 2024 Spring
@@ -672,31 +674,34 @@ Daniel Segal
 Danny Takacs
 Nick Czwartacki
 
-Github link: https://github.com/danielsegal02/peptideplanner.git\n
-"""
+Github link: https://github.com/danielsegal02/peptideplanner.git
+
+\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n straight up homie
+""" # hehe
 # Inserts the credit text into the widget
 credits_info.insert("end", credits_info_text)
-
-# Can insert a group pic into the widget
-# image_path = "Images\dog temp image.gif"  # Replace this with the path to your image file
-# group_photo = PhotoImage(file=image_path)
-# credits_info.image_create("end", image=group_photo)  # This inserts the image at the end of the text
-
-# hehe
-easter_egg = """
-\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n straight up homie
-"""
-credits_info.insert("end", easter_egg)
-
 # Centers the text
 credits_info.tag_configure("center", justify='center') # Create a tag to center-align text
 credits_info.tag_add("center", "1.0", "end") # Apply the 'center' tag to the entire content of the widget
-
 # Make the text widget read-only to prevent user editing
 credits_info.config(state="disabled")
+credits_info.pack(padx=10, pady=10, fill="both", expand=True)
 
-# Pack the Text widget in tab5
-credits_info.pack(padx=10, pady=10, fill="both", expand=True)  
+## Credit Picture
+# Frame for the image
+credit_image_frame = tk.Frame(tab4, width=200)
+credit_image_frame.pack(side=tk.RIGHT, fill="both", expand=True)
+
+# Group Pic inserted into the credit tab
+image_path = "Images/Credit_Group_Pic.png"
+original_image = Image.open(image_path)
+resized_image = original_image.resize((600, 400))  # Adjust size as needed according to the device it is on and how big the window size will be
+group_photo = ImageTk.PhotoImage(resized_image)
+
+# Add a label for the image in credit_image_frame
+image_label = tk.Label(credit_image_frame, image=group_photo)
+image_label.image = group_photo  # Keep a reference to avoid garbage collection
+image_label.pack(padx=10, pady=10)
 
 
 # Start the application
