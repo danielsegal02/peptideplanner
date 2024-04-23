@@ -99,13 +99,18 @@ def combine_smiles(amino_acids_smiles):
             # For the first amino acid, just add it to the peptide molecule
             peptide_mol = Chem.RWMol(aa_mol)
         else:
+            # For subsequent amino acids, perform a peptide bond formation reaction
+            # Define a generic peptide coupling reaction
+            # The reaction removes a water molecule to form the peptide bond (I think)
+
+            # Checks if the previous letter was "G"
             if amino_acids_smiles[i-1] == "C(C(=O)O)N":
+                #  Performs a different reaction on the peptide if the previous amino acid input was G
                 peptide_rxn = rdChemReactions.ReactionFromSmarts('[CH2:1][CH0:2](=[O:3])O.[N:4]>>[CH2:1][CH0:2](=[O:3])[N:4]')
             else:
-                # For subsequent amino acids, perform a peptide bond formation reaction
-                # Define a generic peptide coupling reaction
-                # The reaction removes a water molecule to form the peptide bond (I think)
+                # All other amino acid inputs react using another reaction
                 peptide_rxn = rdChemReactions.ReactionFromSmarts('[CH1:1][CH0:2](=[O:3])O.[N:4]>>[CH1:1][CH0:2](=[O:3])[N:4]')
+            
             # Combine the current peptide molecule with the new amino acid molecule
             product_set = peptide_rxn.RunReactants((peptide_mol, aa_mol))
             
