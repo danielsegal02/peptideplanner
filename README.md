@@ -12,9 +12,14 @@ Welcome to the Peptide Planner application! This software is designed to assist 
     - This is the "database" of all the amino acids that can be used as inputs for the application.
 5. **Images Folder**
     - This is the folder that stores all the generated images, as well as the group picture in the credit tab.
-6. **UnitTest.py**
+6. **SecondaryStructure Folder**
+    - This contains all necessary files for running the separate application to generate the secondary structure.
+        - SecondStruct.py: Contains the tkinter code for the window that retrieves the input for the secondary structure generation. 
+        - SecStructConnector.py: Contains the functions that connects the tkinter application to the jupyter notebook file.
+        - secondaystructure.ipynb: Contains the jupyter notebook code that generates the actual secondary structure.
+7. **UnitTest.py**
     - This is a unit tester file that checks the accuracy of our functions. When run, it prints the outputs of our function calls and compares them to accurate numbers of what they should be.
-7. **UnitTester/Sources**
+8. **UnitTester/Sources**
     - Extra sources to reference for the unit tests / checking the accuracy of the results.
 
 ## Setup:
